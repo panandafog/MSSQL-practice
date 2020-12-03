@@ -36,18 +36,26 @@ namespace Cllient_app
             string tmpHashString = Utility.ByteArrayToString(tmpHash);
 
             String strSQL = "EXEC SignInForAdmin @login = ?, @password = ?";
-            OleDbCommand cmdIC = new OleDbCommand(strSQL, cn);
+            OleDbCommand cmd = new OleDbCommand(strSQL, cn);
 
-            cmdIC.Parameters.Add("@p1", OleDbType.VarChar, 50);
-            cmdIC.Parameters.Add("@p2", OleDbType.VarChar, 50);
+            cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
+            cmd.Parameters.Add("@p2", OleDbType.VarChar, 50);
 
-            cmdIC.Parameters[0].Value = loginTextBox.Text;
-            cmdIC.Parameters[1].Value = tmpHashString;
+            cmd.Parameters[0].Value = loginTextBox.Text;
+            cmd.Parameters[1].Value = tmpHashString;
+
+            OleDbDataReader reader = cmd.ExecuteReader();
 
             try
             {
-                cmdIC.ExecuteNonQuery();
-                MessageBox.Show("Signed in succesfully");
+                if (reader.Read())
+                {
+                    MessageBox.Show("Signed in succesfully");
+                }
+                else
+                {
+                    MessageBox.Show("Signed in failed");
+                }
             }
             catch (OleDbException exc)
             {
