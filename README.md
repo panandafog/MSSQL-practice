@@ -1,0 +1,2 @@
+# MSSQL practice
+ Educational project
