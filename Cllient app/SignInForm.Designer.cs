@@ -90,6 +90,7 @@ namespace Cllient_app
             this.Controls.Add(this.loginTextBox);
             this.Name = "SignInForm";
             this.Text = "Sign In";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SignInForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
