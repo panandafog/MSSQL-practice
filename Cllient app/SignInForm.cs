@@ -22,6 +22,11 @@ namespace Cllient_app
         {
             InitializeComponent();
 
+            accountTypeComboBox.Items.Clear();
+            accountTypeComboBox.Items.Add("student");
+            accountTypeComboBox.Items.Add("teacher");
+            accountTypeComboBox.Items.Add("administrator");
+
             cn = new OleDbConnection();
             cn.ConnectionString = "Provider=SQLOLEDB;Data Source=localhost;Persist Security Info=True;Password=orangejuice_1101;User ID=SA;Initial Catalog=University";
             cn.Open();
@@ -35,7 +40,26 @@ namespace Cllient_app
             byte[] tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
             string tmpHashString = Utility.ByteArrayToString(tmpHash);
 
-            String strSQL = "EXEC SignInForAdmin @login = ?, @password = ?";
+            String strSQL = "";
+            Form newForm = new SignInForm(); 
+
+            switch (accountTypeComboBox.SelectedIndex)
+            {
+                case 0:
+                    strSQL = "EXEC SignInForStudent";
+                    newForm = new StudentOverviewForm();
+                    break;
+                case 1:
+                    strSQL = "EXEC SignInForTeacher";
+                    newForm = new TeacherOverviewForm();
+                    break;
+                case 2:
+                    strSQL = "EXEC SignInForAdmin";
+                    newForm = new DepartmentOverviewForm();
+                    break;
+            }
+
+            strSQL += " @login = ?, @password = ?";
             OleDbCommand cmd = new OleDbCommand(strSQL, cn);
 
             cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
@@ -50,6 +74,7 @@ namespace Cllient_app
             {
                 if (reader.Read())
                 {
+                    newForm.Show();
                     MessageBox.Show("Signed in succesfully");
                 }
                 else

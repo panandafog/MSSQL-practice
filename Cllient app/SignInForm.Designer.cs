@@ -34,18 +34,20 @@ namespace Cllient_app
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.signInButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.accountTypeComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // loginTextBox
             // 
-            this.loginTextBox.Location = new System.Drawing.Point(402, 156);
+            this.loginTextBox.Location = new System.Drawing.Point(405, 103);
             this.loginTextBox.Name = "loginTextBox";
             this.loginTextBox.Size = new System.Drawing.Size(100, 20);
             this.loginTextBox.TabIndex = 0;
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(402, 208);
+            this.passwordTextBox.Location = new System.Drawing.Point(405, 155);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(100, 20);
             this.passwordTextBox.TabIndex = 1;
@@ -53,7 +55,7 @@ namespace Cllient_app
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(274, 162);
+            this.label1.Location = new System.Drawing.Point(277, 109);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 2;
@@ -62,7 +64,7 @@ namespace Cllient_app
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(274, 215);
+            this.label2.Location = new System.Drawing.Point(277, 162);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 3;
@@ -78,11 +80,30 @@ namespace Cllient_app
             this.signInButton.UseVisualStyleBackColor = true;
             this.signInButton.Click += new System.EventHandler(this.signInButton_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(277, 215);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(70, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Account type";
+            // 
+            // accountTypeComboBox
+            // 
+            this.accountTypeComboBox.FormattingEnabled = true;
+            this.accountTypeComboBox.Location = new System.Drawing.Point(405, 212);
+            this.accountTypeComboBox.Name = "accountTypeComboBox";
+            this.accountTypeComboBox.Size = new System.Drawing.Size(100, 21);
+            this.accountTypeComboBox.TabIndex = 6;
+            // 
             // SignInForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.accountTypeComboBox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.signInButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -103,6 +124,8 @@ namespace Cllient_app
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button signInButton;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox accountTypeComboBox;
     }
 }
 
