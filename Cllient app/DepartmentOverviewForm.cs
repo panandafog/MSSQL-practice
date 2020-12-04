@@ -12,9 +12,14 @@ namespace Cllient_app
 {
     public partial class DepartmentOverviewForm : Form
     {
-        public DepartmentOverviewForm()
+        UserInfo userInfo;
+
+        public DepartmentOverviewForm(UserInfo userInfo)
         {
             InitializeComponent();
+
+            this.userInfo = userInfo;
+            userInfoLabel.Text = this.userInfo.lastName + " " + this.userInfo.firstName;
         }
     }
 }

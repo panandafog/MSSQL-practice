@@ -27,6 +27,8 @@ namespace Cllient_app
             accountTypeComboBox.Items.Add("teacher");
             accountTypeComboBox.Items.Add("administrator");
 
+            passwordTextBox.PasswordChar = '*';
+
             cn = new OleDbConnection();
             cn.ConnectionString = "Provider=SQLOLEDB;Data Source=localhost;Persist Security Info=True;Password=orangejuice_1101;User ID=SA;Initial Catalog=University";
             cn.Open();
@@ -41,21 +43,17 @@ namespace Cllient_app
             string tmpHashString = Utility.ByteArrayToString(tmpHash);
 
             String strSQL = "";
-            Form newForm = new SignInForm(); 
 
             switch (accountTypeComboBox.SelectedIndex)
             {
                 case 0:
                     strSQL = "EXEC SignInForStudent";
-                    newForm = new StudentOverviewForm();
                     break;
                 case 1:
                     strSQL = "EXEC SignInForTeacher";
-                    newForm = new TeacherOverviewForm();
                     break;
                 case 2:
                     strSQL = "EXEC SignInForAdmin";
-                    newForm = new DepartmentOverviewForm();
                     break;
             }
 
@@ -74,12 +72,30 @@ namespace Cllient_app
             {
                 if (reader.Read())
                 {
+                    Form newForm = new SignInForm();
+                    UserInfo userInfo = new UserInfo();
+
+                    userInfo.id = reader[0].ToString();
+                    userInfo.firstName = reader[1].ToString();
+                    userInfo.lastName = reader[2].ToString();
+
+                    switch (accountTypeComboBox.SelectedIndex)
+                    {
+                        case 0:
+                            newForm = new StudentOverviewForm(userInfo);
+                            break;
+                        case 1:
+                            newForm = new TeacherOverviewForm(userInfo);
+                            break;
+                        case 2:
+                            newForm = new DepartmentOverviewForm(userInfo);
+                            break;
+                    }
                     newForm.Show();
-                    MessageBox.Show("Signed in succesfully");
                 }
                 else
                 {
-                    MessageBox.Show("Signed in failed");
+                    MessageBox.Show("Signing in failed");
                 }
             }
             catch (OleDbException exc)

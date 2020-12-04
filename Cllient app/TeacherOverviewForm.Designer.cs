@@ -29,19 +29,33 @@ namespace Cllient_app
         /// </summary>
         private void InitializeComponent()
         {
+            this.userInfoLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            // 
+            // userInfoLabel
+            // 
+            this.userInfoLabel.AutoSize = true;
+            this.userInfoLabel.Location = new System.Drawing.Point(651, 9);
+            this.userInfoLabel.Name = "userInfoLabel";
+            this.userInfoLabel.Size = new System.Drawing.Size(35, 13);
+            this.userInfoLabel.TabIndex = 0;
+            this.userInfoLabel.Text = "label1";
             // 
             // TeacherOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.userInfoLabel);
             this.Name = "TeacherOverviewForm";
             this.Text = "Teacher Overview";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.Label userInfoLabel;
     }
 }
