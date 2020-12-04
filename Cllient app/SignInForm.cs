@@ -82,13 +82,13 @@ namespace Cllient_app
                     switch (accountTypeComboBox.SelectedIndex)
                     {
                         case 0:
-                            newForm = new StudentOverviewForm(userInfo);
+                            newForm = new StudentOverviewForm(userInfo, cn);
                             break;
                         case 1:
-                            newForm = new TeacherOverviewForm(userInfo);
+                            newForm = new TeacherOverviewForm(userInfo, cn);
                             break;
                         case 2:
-                            newForm = new DepartmentOverviewForm(userInfo);
+                            newForm = new DepartmentOverviewForm(userInfo, cn);
                             break;
                     }
                     newForm.Show();

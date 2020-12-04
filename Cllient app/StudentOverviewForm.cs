@@ -7,19 +7,72 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.OleDb;
 
 namespace Cllient_app
 {
     public partial class StudentOverviewForm : Form
     {
         UserInfo userInfo;
+        OleDbConnection connection;
 
-        public StudentOverviewForm(UserInfo userInfo)
+        private System.Data.DataSet dataSet;
+
+        public StudentOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
             InitializeComponent();
 
             this.userInfo = userInfo;
             userInfoLabel.Text = this.userInfo.lastName + " " + this.userInfo.firstName;
+
+            this.connection = connection;
+
+            initTimetable();
+            refreshTimetable();
+        }
+
+        private void StudentOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            connection.Close();
+        }
+
+        private void refreshTimetableButton_Click(object sender, EventArgs e)
+        {
+            refreshTimetable();
+        }
+
+        private void initTimetable()
+        {
+            dataSet = new DataSet();
+
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Timetable");
+            tmpTable.Columns.Add("Datetime", typeof(DateTime));
+            tmpTable.Columns.Add("Subject", typeof(String));
+            tmpTable.Columns.Add("Teacher's last name", typeof(String));
+            tmpTable.Columns.Add("Teacher's first name", typeof(String));
+            tmpTable.Columns.Add("Classroom", typeof(String));
+            tmpTable.Columns.Add("Building", typeof(String));
+            tmpTable.Columns.Add("Conference", typeof(String));
+            tmpTable.Columns.Add("Conference link", typeof(String));
+
+            timetableGridView.DataSource = dataSet;
+            timetableGridView.DataMember = "Timetable";
+        }
+
+        private void refreshTimetable()
+        {
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["Timetable"].Clear();
+
+            String strSQL = "EXEC GetClassesForStudent @studentID = " +
+                userInfo.id +
+                ", @isExam = " +
+                examsCheckBox.Checked;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Timetable");
         }
     }
 }
