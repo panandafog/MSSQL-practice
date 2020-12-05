@@ -39,11 +39,17 @@ namespace Cllient_app
             this.marksSubjectComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.marksGridView = new System.Windows.Forms.DataGridView();
+            this.tasksTabPage = new System.Windows.Forms.TabPage();
+            this.tasksGridView = new System.Windows.Forms.DataGridView();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
             this.marksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.marksGridView)).BeginInit();
+            this.tasksTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -59,6 +65,7 @@ namespace Cllient_app
             // 
             this.mainTabControl.Controls.Add(this.timetableTabPage);
             this.mainTabControl.Controls.Add(this.marksTabPage);
+            this.mainTabControl.Controls.Add(this.tasksTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -145,6 +152,44 @@ namespace Cllient_app
             this.marksGridView.Size = new System.Drawing.Size(752, 350);
             this.marksGridView.TabIndex = 2;
             // 
+            // tasksTabPage
+            // 
+            this.tasksTabPage.Controls.Add(this.tasksGridView);
+            this.tasksTabPage.Controls.Add(this.label2);
+            this.tasksTabPage.Controls.Add(this.tasksSubjectComboBox);
+            this.tasksTabPage.Location = new System.Drawing.Point(4, 22);
+            this.tasksTabPage.Name = "tasksTabPage";
+            this.tasksTabPage.Size = new System.Drawing.Size(768, 387);
+            this.tasksTabPage.TabIndex = 2;
+            this.tasksTabPage.Text = "Tasks";
+            this.tasksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // tasksGridView
+            // 
+            this.tasksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tasksGridView.Location = new System.Drawing.Point(10, 32);
+            this.tasksGridView.Name = "tasksGridView";
+            this.tasksGridView.Size = new System.Drawing.Size(752, 350);
+            this.tasksGridView.TabIndex = 5;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Subject:";
+            // 
+            // tasksSubjectComboBox
+            // 
+            this.tasksSubjectComboBox.FormattingEnabled = true;
+            this.tasksSubjectComboBox.Location = new System.Drawing.Point(59, 5);
+            this.tasksSubjectComboBox.Name = "tasksSubjectComboBox";
+            this.tasksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
+            this.tasksSubjectComboBox.TabIndex = 3;
+            this.tasksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.tasksSubjectComboBox_SelectedIndexChanged);
+            // 
             // StudentOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +207,9 @@ namespace Cllient_app
             this.marksTabPage.ResumeLayout(false);
             this.marksTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.marksGridView)).EndInit();
+            this.tasksTabPage.ResumeLayout(false);
+            this.tasksTabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -179,5 +227,9 @@ namespace Cllient_app
         private System.Windows.Forms.ComboBox marksSubjectComboBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView marksGridView;
+        private System.Windows.Forms.TabPage tasksTabPage;
+        private System.Windows.Forms.DataGridView tasksGridView;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox tasksSubjectComboBox;
     }
 }

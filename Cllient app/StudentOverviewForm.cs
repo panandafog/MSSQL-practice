@@ -31,10 +31,12 @@ namespace Cllient_app
 
             dataSet = new DataSet();
 
+            initSubjectComboBoxes();
+
             initTimetable();
             refreshTimetable();
 
-            initMarksSubjectComboBox();
+            initTasksTable();
             initMarksTable();
         }
 
@@ -80,7 +82,7 @@ namespace Cllient_app
             adapter.Fill(dataSet, "Timetable");
         }
 
-        private void initMarksSubjectComboBox()
+        private void initSubjectComboBoxes()
         {
             String strSQL = "EXEC GetCourcesForStudent @studentID =  " +
                 userInfo.id;
@@ -93,6 +95,7 @@ namespace Cllient_app
             while (reader.Read())
             {
                 marksSubjectComboBox.Items.Add(reader["Subject name"] + " [" + reader["Cource name"] + "]");
+                tasksSubjectComboBox.Items.Add(reader["Subject name"] + " [" + reader["Cource name"] + "]");
                 this.subjectsIDs.Add(reader["CourseID"].ToString());
             }
         }
@@ -130,6 +133,44 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Marks");
+        }
+
+        private void initTasksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Tasks");
+            tmpTable.Columns.Add("Mark", typeof(int));
+            tmpTable.Columns.Add("Task", typeof(String));
+            tmpTable.Columns.Add("Description", typeof(String));
+            tmpTable.Columns.Add("Link", typeof(String));
+            tmpTable.Columns.Add("Deadline", typeof(DateTime));
+            tmpTable.Columns.Add("Subject", typeof(String));
+            tmpTable.Columns.Add("Cource", typeof(String));
+
+            tasksGridView.DataSource = dataSet;
+            tasksGridView.DataMember = "Tasks";
+        }
+
+        private void refreshTasksTable()
+        {
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["Tasks"].Clear();
+
+            String strSQL = "EXEC GetTasksWithMarksForStudent @studentID = " +
+                userInfo.id +
+                ", @courceID = " +
+                this.subjectsIDs[tasksSubjectComboBox.SelectedIndex];
+
+            Console.WriteLine(strSQL);
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Tasks");
+        }
+
+        private void tasksSubjectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refreshTasksTable();
         }
     }
 }
