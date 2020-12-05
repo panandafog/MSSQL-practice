@@ -28,10 +28,6 @@ namespace Cllient_app
             accountTypeComboBox.Items.Add("administrator");
 
             passwordTextBox.PasswordChar = '*';
-
-            cn = new OleDbConnection();
-            cn.ConnectionString = "Provider=SQLOLEDB;Data Source=localhost;Persist Security Info=True;Password=orangejuice_1101;User ID=SA;Initial Catalog=University";
-            cn.Open();
         }
 
         private void signInButton_Click(object sender, EventArgs e)
@@ -41,6 +37,10 @@ namespace Cllient_app
             byte[] tmpSource = ASCIIEncoding.ASCII.GetBytes(sSourceData);
             byte[] tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
             string tmpHashString = Utility.ByteArrayToString(tmpHash);
+
+            cn = new OleDbConnection();
+            cn.ConnectionString = "Provider=SQLOLEDB;Data Source=localhost;Persist Security Info=True;Password=orangejuice_1101;User ID=SA;Initial Catalog=University";
+            cn.Open();
 
             String strSQL = "";
 

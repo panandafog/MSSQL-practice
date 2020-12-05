@@ -18,6 +18,8 @@ namespace Cllient_app
 
         private System.Data.DataSet dataSet;
 
+        private List<String> subjectsIDs = new List<String>();
+
         public StudentOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
             InitializeComponent();
@@ -27,8 +29,13 @@ namespace Cllient_app
 
             this.connection = connection;
 
+            dataSet = new DataSet();
+
             initTimetable();
             refreshTimetable();
+
+            initMarksSubjectComboBox();
+            initMarksTable();
         }
 
         private void StudentOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -43,11 +50,9 @@ namespace Cllient_app
 
         private void initTimetable()
         {
-            dataSet = new DataSet();
-
             DataTable tmpTable;
             tmpTable = dataSet.Tables.Add("Timetable");
-            tmpTable.Columns.Add("Datetime", typeof(DateTime));
+            tmpTable.Columns.Add("Date", typeof(DateTime));
             tmpTable.Columns.Add("Subject", typeof(String));
             tmpTable.Columns.Add("Teacher's last name", typeof(String));
             tmpTable.Columns.Add("Teacher's first name", typeof(String));
@@ -73,6 +78,58 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Timetable");
+        }
+
+        private void initMarksSubjectComboBox()
+        {
+            String strSQL = "EXEC GetCourcesForStudent @studentID =  " +
+                userInfo.id;
+
+            OleDbCommand command = new OleDbCommand(strSQL, connection);
+            OleDbDataReader reader = command.ExecuteReader();
+
+            marksSubjectComboBox.Items.Clear();
+
+            while (reader.Read())
+            {
+                marksSubjectComboBox.Items.Add(reader["Subject name"] + " [" + reader["Cource name"] + "]");
+                this.subjectsIDs.Add(reader["CourseID"].ToString());
+            }
+        }
+
+        private void marksSubjectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refreshMarksTable();
+        }
+
+        private void initMarksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Marks");
+            tmpTable.Columns.Add("Mark", typeof(int));
+            tmpTable.Columns.Add("Date", typeof(DateTime));
+            tmpTable.Columns.Add("Task", typeof(String));
+            tmpTable.Columns.Add("Description", typeof(String));
+            tmpTable.Columns.Add("Link", typeof(String));
+            tmpTable.Columns.Add("Deadline", typeof(DateTime));
+
+            marksGridView.DataSource = dataSet;
+            marksGridView.DataMember = "Marks";
+        }
+
+        private void refreshMarksTable()
+        {
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["Marks"].Clear();
+
+            String strSQL = "EXEC GetMarksWithTasksForStudent @studentID = " +
+                userInfo.id +
+                ", @courceID = " +
+                this.subjectsIDs[marksSubjectComboBox.SelectedIndex];
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Marks");
         }
     }
 }
