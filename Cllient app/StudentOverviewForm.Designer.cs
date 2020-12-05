@@ -107,9 +107,13 @@ namespace Cllient_app
             // 
             // timetableGridView
             // 
+            this.timetableGridView.AllowUserToAddRows = false;
+            this.timetableGridView.AllowUserToDeleteRows = false;
+            this.timetableGridView.AllowUserToOrderColumns = true;
             this.timetableGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.timetableGridView.Location = new System.Drawing.Point(6, 6);
             this.timetableGridView.Name = "timetableGridView";
+            this.timetableGridView.ReadOnly = true;
             this.timetableGridView.Size = new System.Drawing.Size(756, 346);
             this.timetableGridView.TabIndex = 0;
             // 
@@ -146,9 +150,13 @@ namespace Cllient_app
             // 
             // marksGridView
             // 
+            this.marksGridView.AllowUserToAddRows = false;
+            this.marksGridView.AllowUserToDeleteRows = false;
+            this.marksGridView.AllowUserToOrderColumns = true;
             this.marksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.marksGridView.Location = new System.Drawing.Point(10, 31);
             this.marksGridView.Name = "marksGridView";
+            this.marksGridView.ReadOnly = true;
             this.marksGridView.Size = new System.Drawing.Size(752, 350);
             this.marksGridView.TabIndex = 2;
             // 
@@ -166,16 +174,21 @@ namespace Cllient_app
             // 
             // tasksGridView
             // 
+            this.tasksGridView.AllowUserToAddRows = false;
+            this.tasksGridView.AllowUserToDeleteRows = false;
+            this.tasksGridView.AllowUserToOrderColumns = true;
             this.tasksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tasksGridView.Location = new System.Drawing.Point(10, 32);
+            this.tasksGridView.Location = new System.Drawing.Point(10, 31);
+            this.tasksGridView.MultiSelect = false;
             this.tasksGridView.Name = "tasksGridView";
+            this.tasksGridView.ReadOnly = true;
             this.tasksGridView.Size = new System.Drawing.Size(752, 350);
             this.tasksGridView.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 8);
+            this.label2.Location = new System.Drawing.Point(7, 7);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 4;
@@ -184,7 +197,7 @@ namespace Cllient_app
             // tasksSubjectComboBox
             // 
             this.tasksSubjectComboBox.FormattingEnabled = true;
-            this.tasksSubjectComboBox.Location = new System.Drawing.Point(59, 5);
+            this.tasksSubjectComboBox.Location = new System.Drawing.Point(59, 4);
             this.tasksSubjectComboBox.Name = "tasksSubjectComboBox";
             this.tasksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
             this.tasksSubjectComboBox.TabIndex = 3;
