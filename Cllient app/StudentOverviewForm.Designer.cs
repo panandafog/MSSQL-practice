@@ -43,6 +43,7 @@ namespace Cllient_app
             this.tasksGridView = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
+            this.reportsButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
@@ -162,6 +163,7 @@ namespace Cllient_app
             // 
             // tasksTabPage
             // 
+            this.tasksTabPage.Controls.Add(this.reportsButton);
             this.tasksTabPage.Controls.Add(this.tasksGridView);
             this.tasksTabPage.Controls.Add(this.label2);
             this.tasksTabPage.Controls.Add(this.tasksSubjectComboBox);
@@ -182,8 +184,9 @@ namespace Cllient_app
             this.tasksGridView.MultiSelect = false;
             this.tasksGridView.Name = "tasksGridView";
             this.tasksGridView.ReadOnly = true;
-            this.tasksGridView.Size = new System.Drawing.Size(752, 350);
+            this.tasksGridView.Size = new System.Drawing.Size(752, 324);
             this.tasksGridView.TabIndex = 5;
+            this.tasksGridView.SelectionChanged += new System.EventHandler(this.tasksGridView_SelectionChanged);
             // 
             // label2
             // 
@@ -202,6 +205,16 @@ namespace Cllient_app
             this.tasksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
             this.tasksSubjectComboBox.TabIndex = 3;
             this.tasksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.tasksSubjectComboBox_SelectedIndexChanged);
+            // 
+            // reportsButton
+            // 
+            this.reportsButton.Location = new System.Drawing.Point(687, 361);
+            this.reportsButton.Name = "reportsButton";
+            this.reportsButton.Size = new System.Drawing.Size(75, 23);
+            this.reportsButton.TabIndex = 6;
+            this.reportsButton.Text = "Reports";
+            this.reportsButton.UseVisualStyleBackColor = true;
+            this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
             // 
             // StudentOverviewForm
             // 
@@ -244,5 +257,6 @@ namespace Cllient_app
         private System.Windows.Forms.DataGridView tasksGridView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox tasksSubjectComboBox;
+        private System.Windows.Forms.Button reportsButton;
     }
 }

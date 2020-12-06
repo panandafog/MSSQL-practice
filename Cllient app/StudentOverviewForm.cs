@@ -31,6 +31,8 @@ namespace Cllient_app
 
             dataSet = new DataSet();
 
+            reportsButton.Enabled = false;
+
             initSubjectComboBoxes();
 
             initTimetable();
@@ -139,6 +141,7 @@ namespace Cllient_app
         {
             DataTable tmpTable;
             tmpTable = dataSet.Tables.Add("Tasks");
+            tmpTable.Columns.Add("TaskID", typeof(int));
             tmpTable.Columns.Add("Mark", typeof(int));
             tmpTable.Columns.Add("Task", typeof(String));
             tmpTable.Columns.Add("Description", typeof(String));
@@ -149,6 +152,7 @@ namespace Cllient_app
 
             tasksGridView.DataSource = dataSet;
             tasksGridView.DataMember = "Tasks";
+            tasksGridView.Columns[0].Visible = false;
         }
 
         private void refreshTasksTable()
@@ -162,8 +166,6 @@ namespace Cllient_app
                 ", @courceID = " +
                 this.subjectsIDs[tasksSubjectComboBox.SelectedIndex];
 
-            Console.WriteLine(strSQL);
-
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Tasks");
         }
@@ -171,6 +173,26 @@ namespace Cllient_app
         private void tasksSubjectComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             refreshTasksTable();
+        }
+
+        private void reportsButton_Click(object sender, EventArgs e)
+        {
+            if (tasksGridView.SelectedRows.Count > 0)
+            {
+                Console.WriteLine(tasksGridView.SelectedRows[0].Cells[0].Value);
+            }
+        }
+
+        private void tasksGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (tasksGridView.SelectedRows.Count > 0)
+            {
+                reportsButton.Enabled = true;
+            } 
+            else
+            {
+                reportsButton.Enabled = false;
+            }
         }
     }
 }
