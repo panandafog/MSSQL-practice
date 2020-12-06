@@ -179,7 +179,8 @@ namespace Cllient_app
         {
             if (tasksGridView.SelectedRows.Count > 0)
             {
-                Console.WriteLine(tasksGridView.SelectedRows[0].Cells[0].Value);
+                Form newForm = new StudentsTaskOverviewForm(this.userInfo, this.connection, Int32.Parse(tasksGridView.SelectedRows[0].Cells[0].Value.ToString()));
+                newForm.Show();
             }
         }
 
