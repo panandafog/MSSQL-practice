@@ -13,11 +13,13 @@ namespace Cllient_app
 {
     public partial class StudentsTaskOverviewForm : Form
     {
-        UserInfo userInfo;
-        OleDbConnection connection;
-        int taskID;
+        private UserInfo userInfo;
+        private OleDbConnection connection;
+        private int taskID;
 
         private System.Data.DataSet dataSet;
+
+        private Boolean editingLastRow = false;
 
         public StudentsTaskOverviewForm(UserInfo userInfo, OleDbConnection connection, int taskID)
         {
@@ -108,27 +110,72 @@ namespace Cllient_app
 
         private void reportsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            String newValue = reportsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            Console.WriteLine(e.RowIndex);
+            Console.WriteLine(reportsGridView.Rows.Count);
 
-            String strSQL = "UPDATE Reports SET Link = ? WHERE ReportID = ?";
-            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
-
-            cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
-            cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
-
-            cmd.Parameters[0].Value = newValue;
-            cmd.Parameters[1].Value = Int32.Parse(reportsGridView.Rows[e.RowIndex].Cells[3].Value.ToString());
-
-            try
+            if (!editingLastRow)
             {
-                cmd.ExecuteNonQuery();
-            }
-            catch (OleDbException exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
 
-            refreshReportsTable();
+                String newValue = reportsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+                String strSQL = "UPDATE Reports SET Link = ? WHERE ReportID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(reportsGridView.Rows[e.RowIndex].Cells[3].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshReportsTable();
+            }
+            else
+            {
+                String newValue = reportsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+                String strSQL = "INSERT INTO Reports (TaskID, StudentID, Link) VALUES (?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p3", OleDbType.VarChar, 50);
+
+                cmd.Parameters[0].Value = taskID;
+                cmd.Parameters[1].Value = userInfo.id;
+                cmd.Parameters[2].Value = newValue;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshReportsTable();
+            }
+        }
+
+        private void reportsGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < reportsGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+            }
         }
     }
 }

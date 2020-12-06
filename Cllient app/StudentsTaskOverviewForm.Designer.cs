@@ -39,13 +39,13 @@ namespace Cllient_app
             // 
             // reportsGridView
             // 
-            this.reportsGridView.AllowUserToAddRows = false;
             this.reportsGridView.AllowUserToDeleteRows = false;
             this.reportsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.reportsGridView.Location = new System.Drawing.Point(12, 29);
             this.reportsGridView.Name = "reportsGridView";
             this.reportsGridView.Size = new System.Drawing.Size(776, 87);
             this.reportsGridView.TabIndex = 0;
+            this.reportsGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.reportsGridView_CellBeginEdit);
             this.reportsGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.reportsGridView_CellEndEdit);
             this.reportsGridView.SelectionChanged += new System.EventHandler(this.reportsGridView_SelectionChanged);
             // 
