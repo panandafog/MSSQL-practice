@@ -39,14 +39,18 @@ namespace Cllient_app
         {
             DataTable tmpTable;
             tmpTable = dataSet.Tables.Add("Reports");
-            tmpTable.Columns.Add("ReportID", typeof(int));
             tmpTable.Columns.Add("Link", typeof(String));
             tmpTable.Columns.Add("Creation date", typeof(DateTime));
             tmpTable.Columns.Add("Last edit date", typeof(DateTime));
+            tmpTable.Columns.Add("ReportID", typeof(int));
 
             reportsGridView.DataSource = dataSet;
             reportsGridView.DataMember = "Reports";
-            reportsGridView.Columns[0].Visible = false;
+            reportsGridView.Columns[3].Visible = false;
+
+            reportsGridView.Columns[0].ReadOnly = false;
+            reportsGridView.Columns[1].ReadOnly = true;
+            reportsGridView.Columns[2].ReadOnly = true;
         }
 
         private void refreshReportsTable()
@@ -59,8 +63,6 @@ namespace Cllient_app
                 userInfo.id +
                 ", @taskID = " +
                 this.taskID;
-
-            Console.WriteLine(strSQL);
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Reports");
@@ -88,9 +90,7 @@ namespace Cllient_app
             System.Data.OleDb.OleDbDataAdapter adapter;
 
             String strSQL = "EXEC GetIssuesOfReportForStudents @reportID = " +
-                reportsGridView.SelectedRows[0].Cells[0].Value.ToString();
-
-            Console.WriteLine(strSQL);
+                reportsGridView.SelectedRows[0].Cells[3].Value.ToString();
 
             dataSet.Tables["Issues"].Clear();
 
@@ -100,11 +100,35 @@ namespace Cllient_app
 
         private void reportsGridView_SelectionChanged(object sender, EventArgs e)
         {
-            if (reportsGridView.SelectedRows.Count > 0)
+           if (reportsGridView.SelectedRows.Count > 0)
             {
-                Console.WriteLine(reportsGridView.SelectedRows.Count);
                 refreshIssuesTable();
             }
+        }
+
+        private void reportsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            String newValue = reportsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+            String strSQL = "UPDATE Reports SET Link = ? WHERE ReportID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
+            cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = newValue;
+            cmd.Parameters[1].Value = Int32.Parse(reportsGridView.Rows[e.RowIndex].Cells[3].Value.ToString());
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+            refreshReportsTable();
         }
     }
 }
