@@ -44,6 +44,9 @@ namespace Cllient_app
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
             this.reportsButton = new System.Windows.Forms.Button();
+            this.eventsTabPage = new System.Windows.Forms.TabPage();
+            this.eventsGridView = new System.Windows.Forms.DataGridView();
+            this.signOutButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
@@ -51,6 +54,8 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.marksGridView)).BeginInit();
             this.tasksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).BeginInit();
+            this.eventsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.eventsGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -67,6 +72,7 @@ namespace Cllient_app
             this.mainTabControl.Controls.Add(this.timetableTabPage);
             this.mainTabControl.Controls.Add(this.marksTabPage);
             this.mainTabControl.Controls.Add(this.tasksTabPage);
+            this.mainTabControl.Controls.Add(this.eventsTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -216,6 +222,39 @@ namespace Cllient_app
             this.reportsButton.UseVisualStyleBackColor = true;
             this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
             // 
+            // eventsTabPage
+            // 
+            this.eventsTabPage.Controls.Add(this.signOutButton);
+            this.eventsTabPage.Controls.Add(this.eventsGridView);
+            this.eventsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.eventsTabPage.Name = "eventsTabPage";
+            this.eventsTabPage.Size = new System.Drawing.Size(768, 387);
+            this.eventsTabPage.TabIndex = 3;
+            this.eventsTabPage.Text = "Events";
+            this.eventsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // eventsGridView
+            // 
+            this.eventsGridView.AllowUserToAddRows = false;
+            this.eventsGridView.AllowUserToDeleteRows = false;
+            this.eventsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.eventsGridView.Location = new System.Drawing.Point(3, 3);
+            this.eventsGridView.Name = "eventsGridView";
+            this.eventsGridView.ReadOnly = true;
+            this.eventsGridView.Size = new System.Drawing.Size(762, 352);
+            this.eventsGridView.TabIndex = 0;
+            this.eventsGridView.SelectionChanged += new System.EventHandler(this.eventsGridView_SelectionChanged);
+            // 
+            // signOutButton
+            // 
+            this.signOutButton.Location = new System.Drawing.Point(690, 361);
+            this.signOutButton.Name = "signOutButton";
+            this.signOutButton.Size = new System.Drawing.Size(75, 23);
+            this.signOutButton.TabIndex = 1;
+            this.signOutButton.Text = "Sign out";
+            this.signOutButton.UseVisualStyleBackColor = true;
+            this.signOutButton.Click += new System.EventHandler(this.signOutButton_Click);
+            // 
             // StudentOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -236,6 +275,8 @@ namespace Cllient_app
             this.tasksTabPage.ResumeLayout(false);
             this.tasksTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).EndInit();
+            this.eventsTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.eventsGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,5 +299,8 @@ namespace Cllient_app
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox tasksSubjectComboBox;
         private System.Windows.Forms.Button reportsButton;
+        private System.Windows.Forms.TabPage eventsTabPage;
+        private System.Windows.Forms.Button signOutButton;
+        private System.Windows.Forms.DataGridView eventsGridView;
     }
 }

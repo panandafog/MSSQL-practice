@@ -32,6 +32,7 @@ namespace Cllient_app
             dataSet = new DataSet();
 
             reportsButton.Enabled = false;
+            signOutButton.Enabled = false;
 
             initSubjectComboBoxes();
 
@@ -40,6 +41,9 @@ namespace Cllient_app
 
             initTasksTable();
             initMarksTable();
+
+            initEventsTable();
+            refreshEventsTable();
         }
 
         private void StudentOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -193,6 +197,78 @@ namespace Cllient_app
             else
             {
                 reportsButton.Enabled = false;
+            }
+        }
+
+        private void initEventsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Events");
+            tmpTable.Columns.Add("EventID", typeof(int));
+            tmpTable.Columns.Add("Title", typeof(String));
+            tmpTable.Columns.Add("Place", typeof(String));
+            tmpTable.Columns.Add("Datetime", typeof(DateTime));
+            tmpTable.Columns.Add("isMandatory", typeof(Boolean));
+
+            eventsGridView.DataSource = dataSet;
+            eventsGridView.DataMember = "Events";
+            eventsGridView.Columns[0].Visible = false;
+        }
+
+        private void refreshEventsTable()
+        {
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["Events"].Clear();
+
+            String strSQL = "EXEC GetFutureEventsForStudent @studentID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Events");
+        }
+
+        private void eventsGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (eventsGridView.SelectedRows.Count > 0)
+            {
+                int selectedRowIndex = eventsGridView.SelectedRows[0].Index;
+                if (Boolean.Parse(eventsGridView.Rows[selectedRowIndex].Cells[4].Value.ToString()))
+                {
+                    signOutButton.Enabled = false;
+                } 
+                else
+                {
+                    signOutButton.Enabled = true;
+                }
+            }
+        }
+
+        private void signOutButton_Click(object sender, EventArgs e)
+        {
+            if (eventsGridView.SelectedRows.Count > 0)
+            {
+                int selectedRowIndex = eventsGridView.SelectedRows[0].Index;
+
+                String strSQL = "DELETE FROM [Events-Students] WHERE EventID = ? AND StudentID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = eventsGridView.Rows[selectedRowIndex].Cells[0].Value.ToString();
+                cmd.Parameters[1].Value = userInfo.id;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshEventsTable();
             }
         }
     }

@@ -195,8 +195,6 @@ namespace Cllient_app
 
         private void deleteReport(int index)
         {
-            Console.WriteLine(index);
-
             String strSQL = "EXEC DeleteReport @reportID = ?";
             OleDbCommand cmd = new OleDbCommand(strSQL, connection);
 
