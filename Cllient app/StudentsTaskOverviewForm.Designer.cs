@@ -33,6 +33,7 @@ namespace Cllient_app
             this.label11 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.issuesGridView = new System.Windows.Forms.DataGridView();
+            this.deleteReportButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.reportsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.issuesGridView)).BeginInit();
             this.SuspendLayout();
@@ -78,11 +79,22 @@ namespace Cllient_app
             this.issuesGridView.Size = new System.Drawing.Size(776, 285);
             this.issuesGridView.TabIndex = 3;
             // 
+            // deleteReportButton
+            // 
+            this.deleteReportButton.Location = new System.Drawing.Point(690, 4);
+            this.deleteReportButton.Name = "deleteReportButton";
+            this.deleteReportButton.Size = new System.Drawing.Size(98, 23);
+            this.deleteReportButton.TabIndex = 4;
+            this.deleteReportButton.Text = "Delete report";
+            this.deleteReportButton.UseVisualStyleBackColor = true;
+            this.deleteReportButton.Click += new System.EventHandler(this.deleteReportButton_Click);
+            // 
             // StudentsTaskOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.deleteReportButton);
             this.Controls.Add(this.issuesGridView);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label11);
@@ -102,5 +114,6 @@ namespace Cllient_app
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView issuesGridView;
+        private System.Windows.Forms.Button deleteReportButton;
     }
 }

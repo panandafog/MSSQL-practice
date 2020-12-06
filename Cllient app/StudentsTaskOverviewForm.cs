@@ -35,6 +35,8 @@ namespace Cllient_app
             refreshReportsTable();
 
             initIssuesTable();
+
+            deleteReportButton.Enabled = false;
         }
 
         private void initReportsTable()
@@ -89,15 +91,21 @@ namespace Cllient_app
 
         private void refreshIssuesTable()
         {
-            System.Data.OleDb.OleDbDataAdapter adapter;
-
-            String strSQL = "EXEC GetIssuesOfReportForStudents @reportID = " +
-                reportsGridView.SelectedRows[0].Cells[3].Value.ToString();
-
             dataSet.Tables["Issues"].Clear();
 
-            adapter = new OleDbDataAdapter(strSQL, connection);
-            adapter.Fill(dataSet, "Issues");
+            if (reportsGridView.SelectedRows.Count > 0)
+            {
+                if (reportsGridView.SelectedRows[0].Index < reportsGridView.Rows.Count - 1)
+                {
+                    System.Data.OleDb.OleDbDataAdapter adapter;
+
+                    String strSQL = "EXEC GetIssuesOfReportForStudents @reportID = " +
+                        reportsGridView.SelectedRows[0].Cells[3].Value.ToString();
+
+                    adapter = new OleDbDataAdapter(strSQL, connection);
+                    adapter.Fill(dataSet, "Issues");
+                }
+            }
         }
 
         private void reportsGridView_SelectionChanged(object sender, EventArgs e)
@@ -105,13 +113,20 @@ namespace Cllient_app
            if (reportsGridView.SelectedRows.Count > 0)
             {
                 refreshIssuesTable();
+
+                if (reportsGridView.SelectedRows[0].Index >= reportsGridView.Rows.Count - 1)
+                {
+                    deleteReportButton.Enabled = false;
+                }
+                else
+                {
+                    deleteReportButton.Enabled = true;
+                }
             }
         }
 
         private void reportsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            Console.WriteLine(e.RowIndex);
-            Console.WriteLine(reportsGridView.Rows.Count);
 
             if (!editingLastRow)
             {
@@ -176,6 +191,40 @@ namespace Cllient_app
             {
                 editingLastRow = true;
             }
+        }
+
+        private void deleteReport(int index)
+        {
+            Console.WriteLine(index);
+
+            String strSQL = "EXEC DeleteReport @reportID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = reportsGridView.Rows[index].Cells[3].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void deleteReportButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < reportsGridView.SelectedRows.Count)
+            {
+                deleteReport(reportsGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshReportsTable();
         }
     }
 }
