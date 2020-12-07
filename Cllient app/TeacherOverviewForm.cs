@@ -18,6 +18,8 @@ namespace Cllient_app
 
         private System.Data.DataSet dataSet;
 
+        private List<String> subjectsIDs = new List<String>();
+
         public TeacherOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
             InitializeComponent();
@@ -31,6 +33,10 @@ namespace Cllient_app
 
             initTimetable();
             refreshTimetable();
+
+            initSubjectComboBox();
+
+            initTasksTable();
         }
 
         private void TeacherOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -73,6 +79,56 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Timetable");
+        }
+
+        private void initSubjectComboBox()
+        {
+            String strSQL = "EXEC GetCourcesForTeacher @teacherID =  " +
+                userInfo.id;
+
+            OleDbCommand command = new OleDbCommand(strSQL, connection);
+            OleDbDataReader reader = command.ExecuteReader();
+
+            tasksSubjectComboBox.Items.Clear();
+
+            while (reader.Read())
+            {
+                tasksSubjectComboBox.Items.Add(reader["Subject name"] + " [" + reader["Cource name"] + "]");
+                this.subjectsIDs.Add(reader["CourseID"].ToString());
+            }
+        }
+
+        private void tasksSubjectComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refreshTasksTable();
+        }
+
+        private void initTasksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Tasks");
+            tmpTable.Columns.Add("TaskID", typeof(int));
+            tmpTable.Columns.Add("CourceID", typeof(int));
+            tmpTable.Columns.Add("Title", typeof(String));
+            tmpTable.Columns.Add("Description", typeof(String));
+            tmpTable.Columns.Add("Link", typeof(String));
+            tmpTable.Columns.Add("Deadline", typeof(DateTime));
+            tmpTable.Columns.Add("isExam", typeof(Boolean));
+            tasksGridView.DataSource = dataSet;
+            tasksGridView.DataMember = "Tasks";
+        }
+
+        private void refreshTasksTable()
+        {
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["Tasks"].Clear();
+
+            String strSQL = "EXEC GetTasksInCource @courceID = " +
+                this.subjectsIDs[tasksSubjectComboBox.SelectedIndex];
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Tasks");
         }
     }
 }
