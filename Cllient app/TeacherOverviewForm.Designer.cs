@@ -40,6 +40,8 @@ namespace Cllient_app
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
             this.deleteTaskButton = new System.Windows.Forms.Button();
+            this.marksButton = new System.Windows.Forms.Button();
+            this.reportsButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
@@ -113,6 +115,8 @@ namespace Cllient_app
             // 
             // tasksTabPage
             // 
+            this.tasksTabPage.Controls.Add(this.reportsButton);
+            this.tasksTabPage.Controls.Add(this.marksButton);
             this.tasksTabPage.Controls.Add(this.deleteTaskButton);
             this.tasksTabPage.Controls.Add(this.tasksGridView);
             this.tasksTabPage.Controls.Add(this.label2);
@@ -170,6 +174,25 @@ namespace Cllient_app
             this.deleteTaskButton.UseVisualStyleBackColor = true;
             this.deleteTaskButton.Click += new System.EventHandler(this.deleteTaskButton_Click);
             // 
+            // marksButton
+            // 
+            this.marksButton.Location = new System.Drawing.Point(605, 16);
+            this.marksButton.Name = "marksButton";
+            this.marksButton.Size = new System.Drawing.Size(75, 23);
+            this.marksButton.TabIndex = 10;
+            this.marksButton.Text = "Marks";
+            this.marksButton.UseVisualStyleBackColor = true;
+            // 
+            // reportsButton
+            // 
+            this.reportsButton.Location = new System.Drawing.Point(524, 16);
+            this.reportsButton.Name = "reportsButton";
+            this.reportsButton.Size = new System.Drawing.Size(75, 23);
+            this.reportsButton.TabIndex = 11;
+            this.reportsButton.Text = "Reports";
+            this.reportsButton.UseVisualStyleBackColor = true;
+            this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
+            // 
             // TeacherOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -205,5 +228,7 @@ namespace Cllient_app
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox tasksSubjectComboBox;
         private System.Windows.Forms.Button deleteTaskButton;
+        private System.Windows.Forms.Button reportsButton;
+        private System.Windows.Forms.Button marksButton;
     }
 }

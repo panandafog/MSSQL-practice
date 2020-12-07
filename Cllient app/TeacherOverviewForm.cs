@@ -34,6 +34,8 @@ namespace Cllient_app
             dataSet = new DataSet();
 
             deleteTaskButton.Enabled = false;
+            reportsButton.Enabled = false;
+            marksButton.Enabled = false;
 
             initTimetable();
             refreshTimetable();
@@ -281,16 +283,28 @@ namespace Cllient_app
                 if (tasksGridView.SelectedRows[0].Index >= tasksGridView.Rows.Count - 1)
                 {
                     deleteTaskButton.Enabled = false;
+                    reportsButton.Enabled = false;
+                    marksButton.Enabled = false;
                 }
                 else
                 {
                     deleteTaskButton.Enabled = true;
+                    reportsButton.Enabled = true;
+                    marksButton.Enabled = true;
                 }
             } 
             else
             {
                 deleteTaskButton.Enabled = false;
+                reportsButton.Enabled = false;
+                marksButton.Enabled = false;
             }
+        }
+
+        private void reportsButton_Click(object sender, EventArgs e)
+        {
+            Form newForm = new TeacherTaskReportsOverviewForm(this.userInfo, this.connection, Int32.Parse(tasksGridView.SelectedRows[0].Cells[0].Value.ToString()));
+            newForm.Show();
         }
     }
 }
