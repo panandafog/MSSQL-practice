@@ -20,6 +20,8 @@ namespace Cllient_app
 
         private List<String> subjectsIDs = new List<String>();
 
+        private Boolean editingLastRow = false;
+
         public TeacherOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
             InitializeComponent();
@@ -100,6 +102,9 @@ namespace Cllient_app
 
         private void tasksSubjectComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            tasksGridView.ReadOnly = false;
+            tasksGridView.AllowUserToAddRows = true;
+
             refreshTasksTable();
         }
 
@@ -116,6 +121,9 @@ namespace Cllient_app
             tmpTable.Columns.Add("isExam", typeof(Boolean));
             tasksGridView.DataSource = dataSet;
             tasksGridView.DataMember = "Tasks";
+
+            tasksGridView.Columns[0].Visible = false;
+            tasksGridView.Columns[1].Visible = false;
         }
 
         private void refreshTasksTable()
@@ -129,6 +137,70 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Tasks");
+        }
+
+        private void tasksGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = tasksGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = tasksGridView.Columns[e.ColumnIndex].Name;
+
+                String strSQL = "UPDATE Tasks SET " + columnName + " = ? WHERE TaskID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                switch (e.ColumnIndex)
+                {
+                    case 2:
+                    case 3:
+                    case 4:
+                        Console.WriteLine("str");
+                        cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                        break;
+                    case 5:
+                        Console.WriteLine("date");
+                        cmd.Parameters.Add("@p1", OleDbType.Date, 50);
+                        break;
+                    case 6:
+                        Console.WriteLine("bool");
+                        cmd.Parameters.Add("@p1", OleDbType.Boolean, 50);
+                        break;
+                    default:
+                        Console.WriteLine("str");
+                        cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                        break;
+                }
+
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                Console.WriteLine(tasksGridView.Rows[e.RowIndex].Cells[0].Value.ToString());
+                cmd.Parameters[1].Value = Int32.Parse(tasksGridView.Rows[e.RowIndex].Cells[0].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshTasksTable();
+            }
+        }
+
+        private void tasksGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < tasksGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+            }
         }
     }
 }

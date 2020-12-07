@@ -135,6 +135,8 @@ namespace Cllient_app
             this.tasksGridView.ReadOnly = true;
             this.tasksGridView.Size = new System.Drawing.Size(752, 324);
             this.tasksGridView.TabIndex = 8;
+            this.tasksGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.tasksGridView_CellBeginEdit);
+            this.tasksGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.tasksGridView_CellEndEdit);
             // 
             // label2
             // 
