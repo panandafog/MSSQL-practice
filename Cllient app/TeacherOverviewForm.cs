@@ -33,11 +33,12 @@ namespace Cllient_app
 
             dataSet = new DataSet();
 
+            deleteTaskButton.Enabled = false;
+
             initTimetable();
             refreshTimetable();
 
             initSubjectComboBox();
-
             initTasksTable();
         }
 
@@ -238,6 +239,58 @@ namespace Cllient_app
         {
             e.Row.Cells[5].Value = DateTime.Today;
             e.Row.Cells[6].Value = 0;
+        }
+
+        private void deleteTask(int index)
+        {
+            String strSQL = "EXEC DeleteTask @taskID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = tasksGridView.Rows[index].Cells[0].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+
+        }
+
+        private void deleteTaskButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < tasksGridView.SelectedRows.Count)
+            {
+                deleteTask(tasksGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshTasksTable();
+        }
+
+        private void tasksGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (tasksGridView.SelectedRows.Count > 0)
+            { 
+                if (tasksGridView.SelectedRows[0].Index >= tasksGridView.Rows.Count - 1)
+                {
+                    deleteTaskButton.Enabled = false;
+                }
+                else
+                {
+                    deleteTaskButton.Enabled = true;
+                }
+            } 
+            else
+            {
+                deleteTaskButton.Enabled = false;
+            }
         }
     }
 }

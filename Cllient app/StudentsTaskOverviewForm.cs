@@ -122,6 +122,10 @@ namespace Cllient_app
                 {
                     deleteReportButton.Enabled = true;
                 }
+            } 
+            else
+            {
+                deleteReportButton.Enabled = false;
             }
         }
 

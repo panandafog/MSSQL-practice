@@ -39,6 +39,7 @@ namespace Cllient_app
             this.tasksGridView = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
+            this.deleteTaskButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
@@ -112,6 +113,7 @@ namespace Cllient_app
             // 
             // tasksTabPage
             // 
+            this.tasksTabPage.Controls.Add(this.deleteTaskButton);
             this.tasksTabPage.Controls.Add(this.tasksGridView);
             this.tasksTabPage.Controls.Add(this.label2);
             this.tasksTabPage.Controls.Add(this.tasksSubjectComboBox);
@@ -138,6 +140,7 @@ namespace Cllient_app
             this.tasksGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.tasksGridView_CellBeginEdit);
             this.tasksGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.tasksGridView_CellEndEdit);
             this.tasksGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.tasksGridView_DefaultValuesNeeded);
+            this.tasksGridView.SelectionChanged += new System.EventHandler(this.tasksGridView_SelectionChanged);
             // 
             // label2
             // 
@@ -156,6 +159,16 @@ namespace Cllient_app
             this.tasksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
             this.tasksSubjectComboBox.TabIndex = 6;
             this.tasksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.tasksSubjectComboBox_SelectedIndexChanged);
+            // 
+            // deleteTaskButton
+            // 
+            this.deleteTaskButton.Location = new System.Drawing.Point(686, 16);
+            this.deleteTaskButton.Name = "deleteTaskButton";
+            this.deleteTaskButton.Size = new System.Drawing.Size(75, 23);
+            this.deleteTaskButton.TabIndex = 9;
+            this.deleteTaskButton.Text = "Delete task";
+            this.deleteTaskButton.UseVisualStyleBackColor = true;
+            this.deleteTaskButton.Click += new System.EventHandler(this.deleteTaskButton_Click);
             // 
             // TeacherOverviewForm
             // 
@@ -191,5 +204,6 @@ namespace Cllient_app
         private System.Windows.Forms.DataGridView tasksGridView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox tasksSubjectComboBox;
+        private System.Windows.Forms.Button deleteTaskButton;
     }
 }
