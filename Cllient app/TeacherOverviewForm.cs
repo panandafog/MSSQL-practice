@@ -155,19 +155,15 @@ namespace Cllient_app
                     case 2:
                     case 3:
                     case 4:
-                        Console.WriteLine("str");
                         cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
                         break;
                     case 5:
-                        Console.WriteLine("date");
                         cmd.Parameters.Add("@p1", OleDbType.Date, 50);
                         break;
                     case 6:
-                        Console.WriteLine("bool");
                         cmd.Parameters.Add("@p1", OleDbType.Boolean, 50);
                         break;
                     default:
-                        Console.WriteLine("str");
                         cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
                         break;
                 }
@@ -175,8 +171,43 @@ namespace Cllient_app
                 cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
 
                 cmd.Parameters[0].Value = newValue;
-                Console.WriteLine(tasksGridView.Rows[e.RowIndex].Cells[0].Value.ToString());
                 cmd.Parameters[1].Value = Int32.Parse(tasksGridView.Rows[e.RowIndex].Cells[0].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshTasksTable();
+            }
+            else
+            {
+                String title = tasksGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                String description = tasksGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+                String link = tasksGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
+                String deadline = tasksGridView.Rows[e.RowIndex].Cells[5].Value.ToString();
+                String isExam = tasksGridView.Rows[e.RowIndex].Cells[6].Value.ToString();
+
+                String strSQL = "INSERT INTO Tasks (CourceID, Title, Description, Link, Deadline, isExam) VALUES (?, ?, ?, ?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p3", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p4", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p5", OleDbType.Date, 50);
+                cmd.Parameters.Add("@p6", OleDbType.Boolean, 50);
+
+                cmd.Parameters[0].Value = this.subjectsIDs[tasksSubjectComboBox.SelectedIndex];
+                cmd.Parameters[1].Value = title;
+                cmd.Parameters[2].Value = description;
+                cmd.Parameters[3].Value = link;
+                cmd.Parameters[4].Value = deadline;
+                cmd.Parameters[5].Value = isExam;
 
                 try
                 {
@@ -201,6 +232,12 @@ namespace Cllient_app
             {
                 editingLastRow = true;
             }
+        }
+
+        private void tasksGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells[5].Value = DateTime.Today;
+            e.Row.Cells[6].Value = 0;
         }
     }
 }

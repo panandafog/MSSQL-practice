@@ -137,6 +137,7 @@ namespace Cllient_app
             this.tasksGridView.TabIndex = 8;
             this.tasksGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.tasksGridView_CellBeginEdit);
             this.tasksGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.tasksGridView_CellEndEdit);
+            this.tasksGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.tasksGridView_DefaultValuesNeeded);
             // 
             // label2
             // 
