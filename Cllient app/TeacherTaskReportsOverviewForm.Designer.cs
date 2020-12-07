@@ -59,6 +59,9 @@ namespace Cllient_app
             this.issuesGridView.Name = "issuesGridView";
             this.issuesGridView.Size = new System.Drawing.Size(773, 178);
             this.issuesGridView.TabIndex = 3;
+            this.issuesGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.issuesGridView_CellBeginEdit);
+            this.issuesGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.issuesGridView_CellEndEdit);
+            this.issuesGridView.SelectionChanged += new System.EventHandler(this.issuesGridView_SelectionChanged);
             // 
             // label2
             // 

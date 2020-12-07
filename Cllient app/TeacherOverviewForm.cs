@@ -260,7 +260,6 @@ namespace Cllient_app
             {
                 MessageBox.Show(exc.ToString());
             }
-
         }
 
         private void deleteTaskButton_Click(object sender, EventArgs e)
