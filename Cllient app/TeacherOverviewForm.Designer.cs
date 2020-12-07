@@ -36,12 +36,12 @@ namespace Cllient_app
             this.examsCheckBox = new System.Windows.Forms.CheckBox();
             this.timetableGridView = new System.Windows.Forms.DataGridView();
             this.tasksTabPage = new System.Windows.Forms.TabPage();
+            this.reportsButton = new System.Windows.Forms.Button();
+            this.marksButton = new System.Windows.Forms.Button();
+            this.deleteTaskButton = new System.Windows.Forms.Button();
             this.tasksGridView = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
-            this.deleteTaskButton = new System.Windows.Forms.Button();
-            this.marksButton = new System.Windows.Forms.Button();
-            this.reportsButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
@@ -129,6 +129,36 @@ namespace Cllient_app
             this.tasksTabPage.Text = "Tasks";
             this.tasksTabPage.UseVisualStyleBackColor = true;
             // 
+            // reportsButton
+            // 
+            this.reportsButton.Location = new System.Drawing.Point(524, 16);
+            this.reportsButton.Name = "reportsButton";
+            this.reportsButton.Size = new System.Drawing.Size(75, 23);
+            this.reportsButton.TabIndex = 11;
+            this.reportsButton.Text = "Reports";
+            this.reportsButton.UseVisualStyleBackColor = true;
+            this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
+            // 
+            // marksButton
+            // 
+            this.marksButton.Location = new System.Drawing.Point(605, 16);
+            this.marksButton.Name = "marksButton";
+            this.marksButton.Size = new System.Drawing.Size(75, 23);
+            this.marksButton.TabIndex = 10;
+            this.marksButton.Text = "Marks";
+            this.marksButton.UseVisualStyleBackColor = true;
+            this.marksButton.Click += new System.EventHandler(this.marksButton_Click);
+            // 
+            // deleteTaskButton
+            // 
+            this.deleteTaskButton.Location = new System.Drawing.Point(686, 16);
+            this.deleteTaskButton.Name = "deleteTaskButton";
+            this.deleteTaskButton.Size = new System.Drawing.Size(75, 23);
+            this.deleteTaskButton.TabIndex = 9;
+            this.deleteTaskButton.Text = "Delete task";
+            this.deleteTaskButton.UseVisualStyleBackColor = true;
+            this.deleteTaskButton.Click += new System.EventHandler(this.deleteTaskButton_Click);
+            // 
             // tasksGridView
             // 
             this.tasksGridView.AllowUserToAddRows = false;
@@ -163,35 +193,6 @@ namespace Cllient_app
             this.tasksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
             this.tasksSubjectComboBox.TabIndex = 6;
             this.tasksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.tasksSubjectComboBox_SelectedIndexChanged);
-            // 
-            // deleteTaskButton
-            // 
-            this.deleteTaskButton.Location = new System.Drawing.Point(686, 16);
-            this.deleteTaskButton.Name = "deleteTaskButton";
-            this.deleteTaskButton.Size = new System.Drawing.Size(75, 23);
-            this.deleteTaskButton.TabIndex = 9;
-            this.deleteTaskButton.Text = "Delete task";
-            this.deleteTaskButton.UseVisualStyleBackColor = true;
-            this.deleteTaskButton.Click += new System.EventHandler(this.deleteTaskButton_Click);
-            // 
-            // marksButton
-            // 
-            this.marksButton.Location = new System.Drawing.Point(605, 16);
-            this.marksButton.Name = "marksButton";
-            this.marksButton.Size = new System.Drawing.Size(75, 23);
-            this.marksButton.TabIndex = 10;
-            this.marksButton.Text = "Marks";
-            this.marksButton.UseVisualStyleBackColor = true;
-            // 
-            // reportsButton
-            // 
-            this.reportsButton.Location = new System.Drawing.Point(524, 16);
-            this.reportsButton.Name = "reportsButton";
-            this.reportsButton.Size = new System.Drawing.Size(75, 23);
-            this.reportsButton.TabIndex = 11;
-            this.reportsButton.Text = "Reports";
-            this.reportsButton.UseVisualStyleBackColor = true;
-            this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
             // 
             // TeacherOverviewForm
             // 

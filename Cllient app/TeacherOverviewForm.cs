@@ -305,5 +305,11 @@ namespace Cllient_app
             Form newForm = new TeacherTaskReportsOverviewForm(this.userInfo, this.connection, Int32.Parse(tasksGridView.SelectedRows[0].Cells[0].Value.ToString()));
             newForm.Show();
         }
+
+        private void marksButton_Click(object sender, EventArgs e)
+        {
+            Form newForm = new TeacherTaskMarksOverviewForm(this.userInfo, this.connection, Int32.Parse(tasksGridView.SelectedRows[0].Cells[0].Value.ToString()));
+            newForm.Show();
+        }
     }
 }

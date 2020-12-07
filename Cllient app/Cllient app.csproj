@@ -52,6 +52,12 @@
     <Compile Include="DepartmentOverviewForm.Designer.cs">
       <DependentUpon>DepartmentOverviewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TeacherTaskMarksOverviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TeacherTaskMarksOverviewForm.Designer.cs">
+      <DependentUpon>TeacherTaskMarksOverviewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TeacherTaskReportsOverviewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TeacherTaskMarksOverviewForm.resx">
+      <DependentUpon>TeacherTaskMarksOverviewForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TeacherTaskReportsOverviewForm.resx">
       <DependentUpon>TeacherTaskReportsOverviewForm.cs</DependentUpon>
     </EmbeddedResource>
