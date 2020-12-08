@@ -73,11 +73,28 @@ namespace Cllient_app
             this.label9 = new System.Windows.Forms.Label();
             this.removeClassroomButton = new System.Windows.Forms.Button();
             this.removeConferenceButton = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.timetableCourceComboBox = new System.Windows.Forms.ComboBox();
+            this.timetableRemoveButton = new System.Windows.Forms.Button();
+            this.timetableGridView = new System.Windows.Forms.DataGridView();
+            this.label11 = new System.Windows.Forms.Label();
+            this.timetableConferenceComboBox = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.timetableClassroomComboBox = new System.Windows.Forms.ComboBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.label15 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.studentsTabPage.SuspendLayout();
             this.groupsTabPage.SuspendLayout();
             this.teachersTabPage.SuspendLayout();
             this.courcesTabPage.SuspendLayout();
+            this.timetableTabPage.SuspendLayout();
             this.classroomsTabPage.SuspendLayout();
             this.buildingsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).BeginInit();
@@ -86,9 +103,13 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.courcesForGroupGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subjectsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.courcesGridView)).BeginInit();
+            this.eventsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buildingsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.classroomsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.conferencesGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -180,6 +201,14 @@ namespace Cllient_app
             // 
             // timetableTabPage
             // 
+            this.timetableTabPage.Controls.Add(this.label12);
+            this.timetableTabPage.Controls.Add(this.timetableClassroomComboBox);
+            this.timetableTabPage.Controls.Add(this.label11);
+            this.timetableTabPage.Controls.Add(this.timetableConferenceComboBox);
+            this.timetableTabPage.Controls.Add(this.label10);
+            this.timetableTabPage.Controls.Add(this.timetableCourceComboBox);
+            this.timetableTabPage.Controls.Add(this.timetableRemoveButton);
+            this.timetableTabPage.Controls.Add(this.timetableGridView);
             this.timetableTabPage.Location = new System.Drawing.Point(4, 22);
             this.timetableTabPage.Name = "timetableTabPage";
             this.timetableTabPage.Size = new System.Drawing.Size(768, 387);
@@ -455,6 +484,14 @@ namespace Cllient_app
             // 
             // eventsTabPage
             // 
+            this.eventsTabPage.Controls.Add(this.button2);
+            this.eventsTabPage.Controls.Add(this.button1);
+            this.eventsTabPage.Controls.Add(this.label15);
+            this.eventsTabPage.Controls.Add(this.comboBox1);
+            this.eventsTabPage.Controls.Add(this.dataGridView2);
+            this.eventsTabPage.Controls.Add(this.label14);
+            this.eventsTabPage.Controls.Add(this.label13);
+            this.eventsTabPage.Controls.Add(this.dataGridView1);
             this.eventsTabPage.Location = new System.Drawing.Point(4, 22);
             this.eventsTabPage.Name = "eventsTabPage";
             this.eventsTabPage.Size = new System.Drawing.Size(768, 387);
@@ -565,6 +602,151 @@ namespace Cllient_app
             this.removeConferenceButton.UseVisualStyleBackColor = true;
             this.removeConferenceButton.Click += new System.EventHandler(this.removeConferenceButton_Click);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(508, 366);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(44, 13);
+            this.label10.TabIndex = 24;
+            this.label10.Text = "Cource:";
+            // 
+            // timetableCourceComboBox
+            // 
+            this.timetableCourceComboBox.FormattingEnabled = true;
+            this.timetableCourceComboBox.Location = new System.Drawing.Point(563, 363);
+            this.timetableCourceComboBox.Name = "timetableCourceComboBox";
+            this.timetableCourceComboBox.Size = new System.Drawing.Size(121, 21);
+            this.timetableCourceComboBox.TabIndex = 23;
+            this.timetableCourceComboBox.SelectedIndexChanged += new System.EventHandler(this.timetableCourceComboBox_SelectedIndexChanged);
+            // 
+            // timetableRemoveButton
+            // 
+            this.timetableRemoveButton.Location = new System.Drawing.Point(690, 361);
+            this.timetableRemoveButton.Name = "timetableRemoveButton";
+            this.timetableRemoveButton.Size = new System.Drawing.Size(75, 23);
+            this.timetableRemoveButton.TabIndex = 22;
+            this.timetableRemoveButton.Text = "Remove";
+            this.timetableRemoveButton.UseVisualStyleBackColor = true;
+            this.timetableRemoveButton.Click += new System.EventHandler(this.timetableRemoveButton_Click);
+            // 
+            // timetableGridView
+            // 
+            this.timetableGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.timetableGridView.Location = new System.Drawing.Point(6, 3);
+            this.timetableGridView.Name = "timetableGridView";
+            this.timetableGridView.Size = new System.Drawing.Size(759, 354);
+            this.timetableGridView.TabIndex = 21;
+            this.timetableGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.timetableGridView_CellBeginEdit);
+            this.timetableGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.timetableGridView_CellEndEdit);
+            this.timetableGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.timetableGridView_DefaultValuesNeeded);
+            this.timetableGridView.SelectionChanged += new System.EventHandler(this.timetableGridView_SelectionChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(293, 366);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(65, 13);
+            this.label11.TabIndex = 26;
+            this.label11.Text = "Conference:";
+            // 
+            // timetableConferenceComboBox
+            // 
+            this.timetableConferenceComboBox.FormattingEnabled = true;
+            this.timetableConferenceComboBox.Location = new System.Drawing.Point(364, 363);
+            this.timetableConferenceComboBox.Name = "timetableConferenceComboBox";
+            this.timetableConferenceComboBox.Size = new System.Drawing.Size(121, 21);
+            this.timetableConferenceComboBox.TabIndex = 25;
+            this.timetableConferenceComboBox.SelectedIndexChanged += new System.EventHandler(this.timetableConferenceComboBox_SelectedIndexChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(7, 366);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(58, 13);
+            this.label12.TabIndex = 28;
+            this.label12.Text = "Classroom:";
+            // 
+            // timetableClassroomComboBox
+            // 
+            this.timetableClassroomComboBox.FormattingEnabled = true;
+            this.timetableClassroomComboBox.Location = new System.Drawing.Point(71, 363);
+            this.timetableClassroomComboBox.Name = "timetableClassroomComboBox";
+            this.timetableClassroomComboBox.Size = new System.Drawing.Size(198, 21);
+            this.timetableClassroomComboBox.TabIndex = 27;
+            this.timetableClassroomComboBox.SelectedIndexChanged += new System.EventHandler(this.timetableClassroomComboBox_SelectedIndexChanged);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(3, 20);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(762, 171);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(4, 4);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(40, 13);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "Events";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(4, 194);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(41, 13);
+            this.label14.TabIndex = 2;
+            this.label14.Text = "Groups";
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(3, 210);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(762, 147);
+            this.dataGridView2.TabIndex = 3;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 366);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.TabIndex = 7;
+            this.label15.Text = "Group:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(59, 363);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 6;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(186, 361);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Add";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(690, 361);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "Add all";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // DepartmentOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -583,6 +765,8 @@ namespace Cllient_app
             this.teachersTabPage.ResumeLayout(false);
             this.courcesTabPage.ResumeLayout(false);
             this.courcesTabPage.PerformLayout();
+            this.timetableTabPage.ResumeLayout(false);
+            this.timetableTabPage.PerformLayout();
             this.classroomsTabPage.ResumeLayout(false);
             this.classroomsTabPage.PerformLayout();
             this.buildingsTabPage.ResumeLayout(false);
@@ -592,9 +776,14 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.courcesForGroupGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subjectsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.courcesGridView)).EndInit();
+            this.eventsTabPage.ResumeLayout(false);
+            this.eventsTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.buildingsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.classroomsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.conferencesGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -646,5 +835,21 @@ namespace Cllient_app
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.DataGridView classroomsGridView;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox timetableClassroomComboBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox timetableConferenceComboBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox timetableCourceComboBox;
+        private System.Windows.Forms.Button timetableRemoveButton;
+        private System.Windows.Forms.DataGridView timetableGridView;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button button2;
     }
 }
