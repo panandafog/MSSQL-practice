@@ -81,14 +81,16 @@ namespace Cllient_app
             this.timetableConferenceComboBox = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.timetableClassroomComboBox = new System.Windows.Forms.ComboBox();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.eventsGridView = new System.Windows.Forms.DataGridView();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.studentsOnEventGridView = new System.Windows.Forms.DataGridView();
             this.label15 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.addStudentOnEventComboBox = new System.Windows.Forms.ComboBox();
+            this.addStudentOnEventButton = new System.Windows.Forms.Button();
+            this.addAllStudentsOnEventButton = new System.Windows.Forms.Button();
+            this.removeStudentFromEventButton = new System.Windows.Forms.Button();
+            this.removeEventButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.studentsTabPage.SuspendLayout();
             this.groupsTabPage.SuspendLayout();
@@ -108,8 +110,8 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.classroomsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.conferencesGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventsGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.studentsOnEventGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -484,14 +486,16 @@ namespace Cllient_app
             // 
             // eventsTabPage
             // 
-            this.eventsTabPage.Controls.Add(this.button2);
-            this.eventsTabPage.Controls.Add(this.button1);
+            this.eventsTabPage.Controls.Add(this.removeEventButton);
+            this.eventsTabPage.Controls.Add(this.removeStudentFromEventButton);
+            this.eventsTabPage.Controls.Add(this.addAllStudentsOnEventButton);
+            this.eventsTabPage.Controls.Add(this.addStudentOnEventButton);
             this.eventsTabPage.Controls.Add(this.label15);
-            this.eventsTabPage.Controls.Add(this.comboBox1);
-            this.eventsTabPage.Controls.Add(this.dataGridView2);
+            this.eventsTabPage.Controls.Add(this.addStudentOnEventComboBox);
+            this.eventsTabPage.Controls.Add(this.studentsOnEventGridView);
             this.eventsTabPage.Controls.Add(this.label14);
             this.eventsTabPage.Controls.Add(this.label13);
-            this.eventsTabPage.Controls.Add(this.dataGridView1);
+            this.eventsTabPage.Controls.Add(this.eventsGridView);
             this.eventsTabPage.Location = new System.Drawing.Point(4, 22);
             this.eventsTabPage.Name = "eventsTabPage";
             this.eventsTabPage.Size = new System.Drawing.Size(768, 387);
@@ -678,13 +682,17 @@ namespace Cllient_app
             this.timetableClassroomComboBox.TabIndex = 27;
             this.timetableClassroomComboBox.SelectedIndexChanged += new System.EventHandler(this.timetableClassroomComboBox_SelectedIndexChanged);
             // 
-            // dataGridView1
+            // eventsGridView
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 20);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(762, 171);
-            this.dataGridView1.TabIndex = 0;
+            this.eventsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.eventsGridView.Location = new System.Drawing.Point(3, 20);
+            this.eventsGridView.Name = "eventsGridView";
+            this.eventsGridView.Size = new System.Drawing.Size(762, 166);
+            this.eventsGridView.TabIndex = 0;
+            this.eventsGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.eventsGridView_CellBeginEdit);
+            this.eventsGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventsGridView_CellEndEdit);
+            this.eventsGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.eventsGridView_DefaultValuesNeeded);
+            this.eventsGridView.SelectionChanged += new System.EventHandler(this.eventsGridView_SelectionChanged);
             // 
             // label13
             // 
@@ -698,54 +706,80 @@ namespace Cllient_app
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(4, 194);
+            this.label14.Location = new System.Drawing.Point(4, 202);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(41, 13);
+            this.label14.Size = new System.Drawing.Size(49, 13);
             this.label14.TabIndex = 2;
-            this.label14.Text = "Groups";
+            this.label14.Text = "Students";
             // 
-            // dataGridView2
+            // studentsOnEventGridView
             // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(3, 210);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(762, 147);
-            this.dataGridView2.TabIndex = 3;
+            this.studentsOnEventGridView.AllowUserToAddRows = false;
+            this.studentsOnEventGridView.AllowUserToDeleteRows = false;
+            this.studentsOnEventGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.studentsOnEventGridView.Location = new System.Drawing.Point(3, 221);
+            this.studentsOnEventGridView.Name = "studentsOnEventGridView";
+            this.studentsOnEventGridView.ReadOnly = true;
+            this.studentsOnEventGridView.Size = new System.Drawing.Size(762, 136);
+            this.studentsOnEventGridView.TabIndex = 3;
+            this.studentsOnEventGridView.SelectionChanged += new System.EventHandler(this.studentsOnEventGridView_SelectionChanged);
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(6, 366);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(39, 13);
+            this.label15.Size = new System.Drawing.Size(47, 13);
             this.label15.TabIndex = 7;
-            this.label15.Text = "Group:";
+            this.label15.Text = "Student:";
             // 
-            // comboBox1
+            // addStudentOnEventComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(59, 363);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 6;
+            this.addStudentOnEventComboBox.FormattingEnabled = true;
+            this.addStudentOnEventComboBox.Location = new System.Drawing.Point(59, 363);
+            this.addStudentOnEventComboBox.Name = "addStudentOnEventComboBox";
+            this.addStudentOnEventComboBox.Size = new System.Drawing.Size(245, 21);
+            this.addStudentOnEventComboBox.TabIndex = 6;
             // 
-            // button1
+            // addStudentOnEventButton
             // 
-            this.button1.Location = new System.Drawing.Point(186, 361);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = true;
+            this.addStudentOnEventButton.Location = new System.Drawing.Point(310, 361);
+            this.addStudentOnEventButton.Name = "addStudentOnEventButton";
+            this.addStudentOnEventButton.Size = new System.Drawing.Size(75, 23);
+            this.addStudentOnEventButton.TabIndex = 8;
+            this.addStudentOnEventButton.Text = "Add";
+            this.addStudentOnEventButton.UseVisualStyleBackColor = true;
+            this.addStudentOnEventButton.Click += new System.EventHandler(this.addStudentOnEventButton_Click);
             // 
-            // button2
+            // addAllStudentsOnEventButton
             // 
-            this.button2.Location = new System.Drawing.Point(690, 361);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Add all";
-            this.button2.UseVisualStyleBackColor = true;
+            this.addAllStudentsOnEventButton.Location = new System.Drawing.Point(391, 361);
+            this.addAllStudentsOnEventButton.Name = "addAllStudentsOnEventButton";
+            this.addAllStudentsOnEventButton.Size = new System.Drawing.Size(75, 23);
+            this.addAllStudentsOnEventButton.TabIndex = 9;
+            this.addAllStudentsOnEventButton.Text = "Add all";
+            this.addAllStudentsOnEventButton.UseVisualStyleBackColor = true;
+            this.addAllStudentsOnEventButton.Click += new System.EventHandler(this.addAllStudentsOnEventOnEventButton_Click);
+            // 
+            // removeStudentFromEventButton
+            // 
+            this.removeStudentFromEventButton.Location = new System.Drawing.Point(690, 361);
+            this.removeStudentFromEventButton.Name = "removeStudentFromEventButton";
+            this.removeStudentFromEventButton.Size = new System.Drawing.Size(75, 23);
+            this.removeStudentFromEventButton.TabIndex = 10;
+            this.removeStudentFromEventButton.Text = "Remove";
+            this.removeStudentFromEventButton.UseVisualStyleBackColor = true;
+            this.removeStudentFromEventButton.Click += new System.EventHandler(this.removeStudentFromEventButton_Click);
+            // 
+            // removeEventButton
+            // 
+            this.removeEventButton.Location = new System.Drawing.Point(690, 192);
+            this.removeEventButton.Name = "removeEventButton";
+            this.removeEventButton.Size = new System.Drawing.Size(75, 23);
+            this.removeEventButton.TabIndex = 11;
+            this.removeEventButton.Text = "Remove";
+            this.removeEventButton.UseVisualStyleBackColor = true;
+            this.removeEventButton.Click += new System.EventHandler(this.removeEventButton_Click);
             // 
             // DepartmentOverviewForm
             // 
@@ -782,8 +816,8 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.classroomsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.conferencesGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventsGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.studentsOnEventGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -843,13 +877,15 @@ namespace Cllient_app
         private System.Windows.Forms.ComboBox timetableCourceComboBox;
         private System.Windows.Forms.Button timetableRemoveButton;
         private System.Windows.Forms.DataGridView timetableGridView;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button addStudentOnEventButton;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.ComboBox addStudentOnEventComboBox;
+        private System.Windows.Forms.DataGridView studentsOnEventGridView;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridView eventsGridView;
+        private System.Windows.Forms.Button addAllStudentsOnEventButton;
+        private System.Windows.Forms.Button removeStudentFromEventButton;
+        private System.Windows.Forms.Button removeEventButton;
     }
 }

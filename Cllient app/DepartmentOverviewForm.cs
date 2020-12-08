@@ -50,6 +50,9 @@ namespace Cllient_app
         private List<int> conferenceIDs;
         private List<String> conferences;
 
+        private List<int> studentIDs;
+        private List<String> students;
+
         public DepartmentOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
             InitializeComponent();
@@ -83,6 +86,9 @@ namespace Cllient_app
             conferenceIDs = new List<int>();
             conferences = new List<String>();
 
+            studentIDs = new List<int>();
+            students = new List<String>();
+
             this.connection = connection;
 
             initStudentsTable();
@@ -114,6 +120,11 @@ namespace Cllient_app
             initTimetable();
             refreshTimetable();
 
+            initEventsTable();
+            refreshEventsTable();
+
+            initStudentsOnEventTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
             removeGroupButton.Enabled = false;
@@ -123,6 +134,8 @@ namespace Cllient_app
             removeBuildingButton.Enabled = false;
             removeConferenceButton.Enabled = false;
             timetableRemoveButton.Enabled = false;
+            removeEventButton.Enabled = false;
+            removeStudentFromEventButton.Enabled = false;
 
             addCourceForGroupButton.Enabled = false;
 
@@ -236,6 +249,21 @@ namespace Cllient_app
             {
                 conferences.Add(reader["Name"].ToString());
                 conferenceIDs.Add(Int32.Parse(reader["ConferenceID"].ToString()));
+            }
+
+            // Get students
+
+            strSQL = "EXEC GetDetailedStudents";
+
+            command = new OleDbCommand(strSQL, connection);
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                students.Add(reader["Name, Group"].ToString());
+                studentIDs.Add(Int32.Parse(reader["StudentID"].ToString()));
+
+                addStudentOnEventComboBox.Items.Add(students.Last<string>());
             }
         }
 
@@ -542,6 +570,64 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Timetable");
+        }
+
+        private void initEventsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Events");
+            tmpTable.Columns.Add("Title", typeof(String));
+            tmpTable.Columns.Add("Place", typeof(String));
+            tmpTable.Columns.Add("Datetime", typeof(DateTime));
+            tmpTable.Columns.Add("isMandatory", typeof(Boolean));
+            tmpTable.Columns.Add("EventID", typeof(int));
+
+            eventsGridView.DataSource = dataSet;
+            eventsGridView.DataMember = "Events";
+            eventsGridView.Columns[4].Visible = false;
+        }
+
+        private void refreshEventsTable()
+        {
+            dataSet.Tables["Events"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "SELECT * FROM EVENTS";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Events");
+        }
+
+        private void initStudentsOnEventTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("StudentsOnEvent");
+            tmpTable.Columns.Add("First Name", typeof(String));
+            tmpTable.Columns.Add("Last Name", typeof(String));
+            tmpTable.Columns.Add("Group", typeof(String));
+            tmpTable.Columns.Add("Study year", typeof(int));
+            tmpTable.Columns.Add("StudentID", typeof(int));
+
+            studentsOnEventGridView.DataSource = dataSet;
+            studentsOnEventGridView.DataMember = "StudentsOnEvent";
+
+            studentsOnEventGridView.Columns[4].Visible = false;
+        }
+
+        private void refreshStudentsOnEventTable()
+        {
+            if (eventsGridView.SelectedRows.Count > 0)
+            {
+                dataSet.Tables["StudentsOnEvent"].Clear();
+
+                System.Data.OleDb.OleDbDataAdapter adapter;
+
+                String strSQL = "EXEC GetStudentsForEvent @eventID = " + eventsGridView.SelectedRows[0].Cells[4].Value.ToString();
+
+                adapter = new OleDbDataAdapter(strSQL, connection);
+                adapter.Fill(dataSet, "StudentsOnEvent");
+            }
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
@@ -2220,6 +2306,248 @@ namespace Cllient_app
             }
 
             refreshTimetable();
+        }
+
+        private void eventsGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < eventsGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+
+                removeEventButton.Enabled = true;
+            }
+        }
+
+        private void eventsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = eventsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = eventsGridView.Columns[e.ColumnIndex].Name;
+
+                String strSQL = "UPDATE Events SET " + columnName + " = ? WHERE EventID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                switch (e.ColumnIndex)
+                {
+                    case 2:
+                        cmd.Parameters.Add("@p1", OleDbType.Date, 50);
+                        break;
+                    case 3:
+                        cmd.Parameters.Add("@p1", OleDbType.Boolean, 50);
+                        break;
+                    default:
+                        cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                        break;
+                }
+
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                Console.WriteLine(newValue);
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(eventsGridView.Rows[e.RowIndex].Cells[4].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshEventsTable();
+            }
+            else
+            {
+                String title = eventsGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                String place = eventsGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+                String datetime = eventsGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                String mandatory = eventsGridView.Rows[e.RowIndex].Cells[3].Value.ToString();
+
+                String strSQL = "INSERT INTO Events (Title, Place, Datetime, isMandatory) VALUES (?, ?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p3", OleDbType.Date, 50);
+                cmd.Parameters.Add("@p3", OleDbType.Boolean, 50);
+
+                cmd.Parameters[0].Value = title;
+                cmd.Parameters[1].Value = place;
+                cmd.Parameters[2].Value = datetime;
+                cmd.Parameters[2].Value = mandatory;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshEventsTable();
+            }
+        }
+
+        private void eventsGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (eventsGridView.SelectedRows.Count > 0)
+            {
+                removeEventButton.Enabled = true;
+                addStudentOnEventButton.Enabled = true;
+                addAllStudentsOnEventButton.Enabled = true;
+
+                refreshStudentsOnEventTable();
+            }
+            else
+            {
+                removeEventButton.Enabled = false;
+                addStudentOnEventButton.Enabled = false;
+                addAllStudentsOnEventButton.Enabled = false;
+            }
+        }
+
+        private void eventsGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells[2].Value = DateTime.Today;
+            e.Row.Cells[3].Value = false;
+        }
+
+        private void addAllStudentsOnEventOnEventButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+            while (index < studentIDs.Count)
+            {
+                String strSQL = "INSERT INTO [Events-Students] (EventID, StudentID) VALUES (?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = eventsGridView.SelectedRows[0].Cells[4].Value;
+                cmd.Parameters[1].Value = studentIDs[index];
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    // MessageBox.Show(exc.ToString());
+                }
+
+                index++;
+            }
+
+            refreshStudentsOnEventTable();
+        }
+
+        private void addStudentOnEventButton_Click(object sender, EventArgs e)
+        {
+            String strSQL = "INSERT INTO [Events-Students] (EventID, StudentID) VALUES (?, ?)";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+            cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = eventsGridView.SelectedRows[0].Cells[4].Value;
+            cmd.Parameters[1].Value = studentIDs[addStudentOnEventComboBox.SelectedIndex];
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                //MessageBox.Show(exc.ToString());
+            }
+
+            refreshStudentsOnEventTable();
+        }
+
+        private void removeStudentFromEvent(int index)
+        {
+            String strSQL = "DELETE FROM [Events-Students] WHERE EventID = ? AND StudentID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+            cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = eventsGridView.SelectedRows[0].Cells[4].Value;
+            cmd.Parameters[1].Value = studentsOnEventGridView.Rows[index].Cells[4].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                //MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeStudentFromEventButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < studentsOnEventGridView.SelectedRows.Count)
+            {
+                removeStudentFromEvent(studentsOnEventGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshStudentsOnEventTable();
+        }
+
+        private void studentsOnEventGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (studentsOnEventGridView.SelectedRows.Count > 0)
+            {
+                removeStudentFromEventButton.Enabled = true;
+            }
+            else
+            {
+                removeStudentFromEventButton.Enabled = false;
+            }
+        }
+
+        private void removeEvent(int index)
+        {
+            String strSQL = "DELETE FROM Events WHERE EventID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = eventsGridView.Rows[index].Cells[4].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeEventButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < eventsGridView.SelectedRows.Count)
+            {
+                removeEvent(eventsGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshEventsTable();
         }
     }
 }
