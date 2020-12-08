@@ -82,13 +82,16 @@ namespace Cllient_app
             initCourcesTable();
             refreshCourcesTable();
 
+            initBuildingsTable();
+            refreshBuildingsTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
             removeGroupButton.Enabled = false;
             removeCourceForGroupButton.Enabled = false;
             removeSubjectButton.Enabled = false;
             removeCourceButton.Enabled = false;
-
+            removeBuildingButton.Enabled = false;
             addCourceForGroupButton.Enabled = false;
 
             // Get groups
@@ -157,7 +160,6 @@ namespace Cllient_app
                 subjectIDs.Add(Int32.Parse(reader["SubjectID"].ToString()));
             }
         }
-
 
         private void DepartmentOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -342,6 +344,31 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Cources");
+        }
+
+        private void initBuildingsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Buildings");
+            tmpTable.Columns.Add("Name", typeof(String));
+            tmpTable.Columns.Add("Address", typeof(String));
+            tmpTable.Columns.Add("BuildingID", typeof(int));
+
+            buildingsGridView.DataSource = dataSet;
+            buildingsGridView.DataMember = "Buildings";
+            buildingsGridView.Columns[2].Visible = false;
+        }
+
+        private void refreshBuildingsTable()
+        {
+            dataSet.Tables["Buildings"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "SELECT * FROM Buildings";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Buildings");
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
@@ -1283,6 +1310,117 @@ namespace Cllient_app
 
                 refreshCourcesTable();
             }
+        }
+
+        private void buildingsGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < buildingsGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+            }
+        }
+
+        private void buildingsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = buildingsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = buildingsGridView.Columns[e.ColumnIndex].Name;
+
+                String strSQL = "UPDATE Buildings SET " + columnName + " = ? WHERE BuildingID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(buildingsGridView.Rows[e.RowIndex].Cells[2].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshBuildingsTable();
+            }
+            else
+            {
+                String name = buildingsGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                String address = buildingsGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+
+                String strSQL = "INSERT INTO Buildings (Name, Address) VALUES (?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.VarWChar, 50);
+
+                cmd.Parameters[0].Value = name;
+                cmd.Parameters[1].Value = address;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshBuildingsTable();
+            }
+        }
+
+        private void buildingsGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (buildingsGridView.SelectedRows.Count > 0)
+            {
+                removeBuildingButton.Enabled = true;
+            }
+            else
+            {
+                removeBuildingButton.Enabled = false;
+            }
+        }
+
+        private void removeBuilding(int index)
+        {
+            String strSQL = "DELETE FROM Buildings WHERE BuildingID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = buildingsGridView.Rows[index].Cells[2].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeBuildingButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < buildingsGridView.SelectedRows.Count)
+            {
+                removeBuilding(buildingsGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshBuildingsTable();
         }
     }
 }
