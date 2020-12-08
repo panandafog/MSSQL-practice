@@ -85,6 +85,9 @@ namespace Cllient_app
             initBuildingsTable();
             refreshBuildingsTable();
 
+            initConferencesTable();
+            refreshConferencesTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
             removeGroupButton.Enabled = false;
@@ -92,6 +95,8 @@ namespace Cllient_app
             removeSubjectButton.Enabled = false;
             removeCourceButton.Enabled = false;
             removeBuildingButton.Enabled = false;
+            removeConferenceButton.Enabled = false;
+
             addCourceForGroupButton.Enabled = false;
 
             // Get groups
@@ -369,6 +374,31 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Buildings");
+        }
+
+        private void initConferencesTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Conferences");
+            tmpTable.Columns.Add("Name", typeof(String));
+            tmpTable.Columns.Add("Link", typeof(String));
+            tmpTable.Columns.Add("ConferenceID", typeof(int));
+
+            conferencesGridView.DataSource = dataSet;
+            conferencesGridView.DataMember = "Conferences";
+            conferencesGridView.Columns[2].Visible = false;
+        }
+
+        private void refreshConferencesTable()
+        {
+            dataSet.Tables["Conferences"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "SELECT * FROM Conferences";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Conferences");
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
@@ -1421,6 +1451,117 @@ namespace Cllient_app
             }
 
             refreshBuildingsTable();
+        }
+
+        private void conferencesGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < conferencesGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+            }
+        }
+
+        private void conferencesGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = conferencesGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = conferencesGridView.Columns[e.ColumnIndex].Name;
+
+                String strSQL = "UPDATE Conferences SET " + columnName + " = ? WHERE ConferenceID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(conferencesGridView.Rows[e.RowIndex].Cells[2].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshConferencesTable();
+            }
+            else
+            {
+                String name = conferencesGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                String link = conferencesGridView.Rows[e.RowIndex].Cells[1].Value.ToString();
+
+                String strSQL = "INSERT INTO Conferences (Name, Link) VALUES (?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.VarWChar, 50);
+
+                cmd.Parameters[0].Value = name;
+                cmd.Parameters[1].Value = link;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshConferencesTable();
+            }
+        }
+
+        private void conferencesGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (conferencesGridView.SelectedRows.Count > 0)
+            {
+                removeConferenceButton.Enabled = true;
+            }
+            else
+            {
+                removeConferenceButton.Enabled = false;
+            }
+        }
+
+        private void removeConference(int index)
+        {
+            String strSQL = "DELETE FROM Conferences WHERE ConferenceID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = conferencesGridView.Rows[index].Cells[2].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeConferenceButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < conferencesGridView.SelectedRows.Count)
+            {
+                removeConference(conferencesGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshConferencesTable();
         }
     }
 }

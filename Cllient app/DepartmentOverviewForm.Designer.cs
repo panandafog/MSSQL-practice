@@ -65,11 +65,20 @@ namespace Cllient_app
             this.eventsTabPage = new System.Windows.Forms.TabPage();
             this.buildingsGridView = new System.Windows.Forms.DataGridView();
             this.removeBuildingButton = new System.Windows.Forms.Button();
+            this.classroomsGridView = new System.Windows.Forms.DataGridView();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.conferencesGridView = new System.Windows.Forms.DataGridView();
+            this.buildingForClassroomComboBox = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.removeClassroomButton = new System.Windows.Forms.Button();
+            this.removeConferenceButton = new System.Windows.Forms.Button();
             this.mainTabControl.SuspendLayout();
             this.studentsTabPage.SuspendLayout();
             this.groupsTabPage.SuspendLayout();
             this.teachersTabPage.SuspendLayout();
             this.courcesTabPage.SuspendLayout();
+            this.classroomsTabPage.SuspendLayout();
             this.buildingsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teachersGridView)).BeginInit();
@@ -78,6 +87,8 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.subjectsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.courcesGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buildingsGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.classroomsGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.conferencesGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -178,6 +189,14 @@ namespace Cllient_app
             // 
             // classroomsTabPage
             // 
+            this.classroomsTabPage.Controls.Add(this.removeConferenceButton);
+            this.classroomsTabPage.Controls.Add(this.removeClassroomButton);
+            this.classroomsTabPage.Controls.Add(this.label9);
+            this.classroomsTabPage.Controls.Add(this.buildingForClassroomComboBox);
+            this.classroomsTabPage.Controls.Add(this.conferencesGridView);
+            this.classroomsTabPage.Controls.Add(this.label8);
+            this.classroomsTabPage.Controls.Add(this.label7);
+            this.classroomsTabPage.Controls.Add(this.classroomsGridView);
             this.classroomsTabPage.Location = new System.Drawing.Point(4, 22);
             this.classroomsTabPage.Name = "classroomsTabPage";
             this.classroomsTabPage.Size = new System.Drawing.Size(768, 387);
@@ -467,6 +486,79 @@ namespace Cllient_app
             this.removeBuildingButton.UseVisualStyleBackColor = true;
             this.removeBuildingButton.Click += new System.EventHandler(this.removeBuildingButton_Click);
             // 
+            // classroomsGridView
+            // 
+            this.classroomsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.classroomsGridView.Location = new System.Drawing.Point(6, 29);
+            this.classroomsGridView.Name = "classroomsGridView";
+            this.classroomsGridView.Size = new System.Drawing.Size(759, 172);
+            this.classroomsGridView.TabIndex = 0;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(3, 6);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(60, 13);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "Classrooms";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 210);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(67, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Conferences";
+            // 
+            // conferencesGridView
+            // 
+            this.conferencesGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.conferencesGridView.Location = new System.Drawing.Point(6, 234);
+            this.conferencesGridView.Name = "conferencesGridView";
+            this.conferencesGridView.Size = new System.Drawing.Size(759, 123);
+            this.conferencesGridView.TabIndex = 3;
+            this.conferencesGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.conferencesGridView_CellBeginEdit);
+            this.conferencesGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.conferencesGridView_CellEndEdit);
+            this.conferencesGridView.SelectionChanged += new System.EventHandler(this.conferencesGridView_SelectionChanged);
+            // 
+            // buildingForClassroomComboBox
+            // 
+            this.buildingForClassroomComboBox.FormattingEnabled = true;
+            this.buildingForClassroomComboBox.Location = new System.Drawing.Point(563, 207);
+            this.buildingForClassroomComboBox.Name = "buildingForClassroomComboBox";
+            this.buildingForClassroomComboBox.Size = new System.Drawing.Size(121, 21);
+            this.buildingForClassroomComboBox.TabIndex = 4;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(510, 210);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(47, 13);
+            this.label9.TabIndex = 5;
+            this.label9.Text = "Building:";
+            // 
+            // removeClassroomButton
+            // 
+            this.removeClassroomButton.Location = new System.Drawing.Point(690, 205);
+            this.removeClassroomButton.Name = "removeClassroomButton";
+            this.removeClassroomButton.Size = new System.Drawing.Size(75, 23);
+            this.removeClassroomButton.TabIndex = 6;
+            this.removeClassroomButton.Text = "Remove";
+            this.removeClassroomButton.UseVisualStyleBackColor = true;
+            // 
+            // removeConferenceButton
+            // 
+            this.removeConferenceButton.Location = new System.Drawing.Point(690, 361);
+            this.removeConferenceButton.Name = "removeConferenceButton";
+            this.removeConferenceButton.Size = new System.Drawing.Size(75, 23);
+            this.removeConferenceButton.TabIndex = 7;
+            this.removeConferenceButton.Text = "Remove";
+            this.removeConferenceButton.UseVisualStyleBackColor = true;
+            this.removeConferenceButton.Click += new System.EventHandler(this.removeConferenceButton_Click);
+            // 
             // DepartmentOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -485,6 +577,8 @@ namespace Cllient_app
             this.teachersTabPage.ResumeLayout(false);
             this.courcesTabPage.ResumeLayout(false);
             this.courcesTabPage.PerformLayout();
+            this.classroomsTabPage.ResumeLayout(false);
+            this.classroomsTabPage.PerformLayout();
             this.buildingsTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teachersGridView)).EndInit();
@@ -493,6 +587,8 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.subjectsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.courcesGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.buildingsGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.classroomsGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.conferencesGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -536,5 +632,13 @@ namespace Cllient_app
         private System.Windows.Forms.TabPage eventsTabPage;
         private System.Windows.Forms.Button removeBuildingButton;
         private System.Windows.Forms.DataGridView buildingsGridView;
+        private System.Windows.Forms.Button removeConferenceButton;
+        private System.Windows.Forms.Button removeClassroomButton;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox buildingForClassroomComboBox;
+        private System.Windows.Forms.DataGridView conferencesGridView;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DataGridView classroomsGridView;
     }
 }
