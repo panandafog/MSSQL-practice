@@ -42,9 +42,13 @@ namespace Cllient_app
             this.studentsGroupComboBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.removeStudentButton = new System.Windows.Forms.Button();
+            this.removeTeacherButton = new System.Windows.Forms.Button();
+            this.teachersGridView = new System.Windows.Forms.DataGridView();
             this.mainTabControl.SuspendLayout();
             this.studentsTabPage.SuspendLayout();
+            this.teachersTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teachersGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -97,6 +101,8 @@ namespace Cllient_app
             // 
             // teachersTabPage
             // 
+            this.teachersTabPage.Controls.Add(this.removeTeacherButton);
+            this.teachersTabPage.Controls.Add(this.teachersGridView);
             this.teachersTabPage.Location = new System.Drawing.Point(4, 22);
             this.teachersTabPage.Name = "teachersTabPage";
             this.teachersTabPage.Size = new System.Drawing.Size(768, 387);
@@ -149,7 +155,6 @@ namespace Cllient_app
             this.studentsGridView.TabIndex = 0;
             this.studentsGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.studentsGridView_CellBeginEdit);
             this.studentsGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.studentsGridView_CellEndEdit);
-            this.studentsGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.studentsGridView_DefaultValuesNeeded);
             this.studentsGridView.SelectionChanged += new System.EventHandler(this.studentsGridView_SelectionChanged);
             // 
             // studentsGroupComboBox
@@ -180,6 +185,27 @@ namespace Cllient_app
             this.removeStudentButton.UseVisualStyleBackColor = true;
             this.removeStudentButton.Click += new System.EventHandler(this.removeStudentButton_Click);
             // 
+            // removeTeacherButton
+            // 
+            this.removeTeacherButton.Location = new System.Drawing.Point(690, 362);
+            this.removeTeacherButton.Name = "removeTeacherButton";
+            this.removeTeacherButton.Size = new System.Drawing.Size(75, 23);
+            this.removeTeacherButton.TabIndex = 5;
+            this.removeTeacherButton.Text = "Remove";
+            this.removeTeacherButton.UseVisualStyleBackColor = true;
+            this.removeTeacherButton.Click += new System.EventHandler(this.removeTeacherButton_Click);
+            // 
+            // teachersGridView
+            // 
+            this.teachersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.teachersGridView.Location = new System.Drawing.Point(3, 2);
+            this.teachersGridView.Name = "teachersGridView";
+            this.teachersGridView.Size = new System.Drawing.Size(762, 354);
+            this.teachersGridView.TabIndex = 4;
+            this.teachersGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.teachersGridView_CellBeginEdit);
+            this.teachersGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.teachersGridView_CellEndEdit);
+            this.teachersGridView.SelectionChanged += new System.EventHandler(this.teachersGridView_SelectionChanged);
+            // 
             // DepartmentOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -193,7 +219,9 @@ namespace Cllient_app
             this.mainTabControl.ResumeLayout(false);
             this.studentsTabPage.ResumeLayout(false);
             this.studentsTabPage.PerformLayout();
+            this.teachersTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.teachersGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,5 +242,7 @@ namespace Cllient_app
         private System.Windows.Forms.TabPage timetableTabPage;
         private System.Windows.Forms.TabPage classroomsTabPage;
         private System.Windows.Forms.TabPage buildingsTabPage;
+        private System.Windows.Forms.Button removeTeacherButton;
+        private System.Windows.Forms.DataGridView teachersGridView;
     }
 }
