@@ -355,6 +355,7 @@ namespace Cllient_app
             this.subjectForCourceComboBox.Name = "subjectForCourceComboBox";
             this.subjectForCourceComboBox.Size = new System.Drawing.Size(121, 21);
             this.subjectForCourceComboBox.TabIndex = 19;
+            this.subjectForCourceComboBox.SelectedIndexChanged += new System.EventHandler(this.subjectForCourceComboBox_SelectedIndexChanged);
             // 
             // removeSubjectButton
             // 
@@ -395,6 +396,7 @@ namespace Cllient_app
             this.removeCourceButton.TabIndex = 15;
             this.removeCourceButton.Text = "Remove";
             this.removeCourceButton.UseVisualStyleBackColor = true;
+            this.removeCourceButton.Click += new System.EventHandler(this.removeCourceButton_Click);
             // 
             // courcesGridView
             // 
@@ -403,6 +405,10 @@ namespace Cllient_app
             this.courcesGridView.Name = "courcesGridView";
             this.courcesGridView.Size = new System.Drawing.Size(759, 164);
             this.courcesGridView.TabIndex = 14;
+            this.courcesGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.courcesGridView_CellBeginEdit);
+            this.courcesGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.courcesGridView_CellEndEdit);
+            this.courcesGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.courcesGridView_DefaultValuesNeeded);
+            this.courcesGridView.SelectionChanged += new System.EventHandler(this.courcesGridView_SelectionChanged);
             // 
             // label6
             // 
@@ -420,6 +426,7 @@ namespace Cllient_app
             this.teacherForCourceComboBox.Name = "teacherForCourceComboBox";
             this.teacherForCourceComboBox.Size = new System.Drawing.Size(189, 21);
             this.teacherForCourceComboBox.TabIndex = 21;
+            this.teacherForCourceComboBox.SelectedIndexChanged += new System.EventHandler(this.teacherForCourceComboBox_SelectedIndexChanged);
             // 
             // eventsTabPage
             // 

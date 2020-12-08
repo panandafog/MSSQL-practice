@@ -22,6 +22,7 @@ namespace Cllient_app
         private Boolean editingLastRow = false;
         private Boolean updatingStudentGroupComboBox = false;
         private Boolean updatingGroupProgramComboBox = false;
+        private Boolean updatingCourceComboBoxes = false;
 
         private List<int> groupIDs;
         private List<String> groups;
@@ -31,6 +32,12 @@ namespace Cllient_app
 
         private List<int> courceIDs;
         private List<String> cources;
+
+        private List<int> teacherIDs;
+        private List<String> teachers;
+
+        private List<int> subjectIDs;
+        private List<String> subjects;
 
         public DepartmentOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
@@ -50,6 +57,12 @@ namespace Cllient_app
             courceIDs = new List<int>();
             cources = new List<String>();
 
+            teacherIDs = new List<int>();
+            teachers = new List<String>();
+
+            subjectIDs = new List<int>();
+            subjects = new List<String>();
+
             this.connection = connection;
 
             initStudentsTable();
@@ -66,10 +79,15 @@ namespace Cllient_app
             initSubjectsTable();
             refreshSubjectsTable();
 
+            initCourcesTable();
+            refreshCourcesTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
             removeGroupButton.Enabled = false;
             removeCourceForGroupButton.Enabled = false;
+            removeSubjectButton.Enabled = false;
+            removeCourceButton.Enabled = false;
 
             addCourceForGroupButton.Enabled = false;
 
@@ -111,6 +129,32 @@ namespace Cllient_app
                 cources.Add(reader["Name"].ToString());
                 courceIDs.Add(Int32.Parse(reader["CourseID"].ToString()));
                 addCourceForGroupComboBox.Items.Add(cources.Last<string>());
+            }
+
+            // Get teachers
+
+            strSQL = "SELECT * FROM Teachers";
+
+            command = new OleDbCommand(strSQL, connection);
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                teachers.Add(reader["FirstName"].ToString() + " " + reader["LastName"].ToString());
+                teacherIDs.Add(Int32.Parse(reader["TeacherID"].ToString()));
+            }
+
+            // Get subjects
+
+            strSQL = "SELECT * FROM Subjects";
+
+            command = new OleDbCommand(strSQL, connection);
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                subjects.Add(reader["Name"].ToString());
+                subjectIDs.Add(Int32.Parse(reader["SubjectID"].ToString()));
             }
         }
 
@@ -262,6 +306,42 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Subjects");
+        }
+
+        private void initCourcesTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Cources");
+            tmpTable.Columns.Add("Cource", typeof(String));
+            tmpTable.Columns.Add("Subject", typeof(String));
+            tmpTable.Columns.Add("Teacher's first name", typeof(String));
+            tmpTable.Columns.Add("Teacher's last name", typeof(String));
+            tmpTable.Columns.Add("CourseID", typeof(int));
+            tmpTable.Columns.Add("TeacherID", typeof(int));
+            tmpTable.Columns.Add("SubjectID", typeof(int));
+
+            courcesGridView.DataSource = dataSet;
+            courcesGridView.DataMember = "Cources";
+
+            courcesGridView.Columns[4].Visible = false;
+            courcesGridView.Columns[5].Visible = false;
+            courcesGridView.Columns[6].Visible = false;
+
+            courcesGridView.Columns[1].ReadOnly = true;
+            courcesGridView.Columns[2].ReadOnly = true;
+            courcesGridView.Columns[3].ReadOnly = true;
+        }
+
+        private void refreshCourcesTable()
+        {
+            dataSet.Tables["Cources"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "EXEC GetCources";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Cources");
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
@@ -964,6 +1044,245 @@ namespace Cllient_app
             }
 
             refreshSubjectsTable();
+        }
+
+        private void courcesGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < courcesGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+
+                teacherForCourceComboBox.Items.Clear();
+                subjectForCourceComboBox.Items.Clear();
+
+                updatingCourceComboBoxes = true;
+                int index = 0;
+                while (index < teacherIDs.Count)
+                {
+                    teacherForCourceComboBox.Items.Add(teachers[index]);
+                    index++;
+                }
+                teacherForCourceComboBox.SelectedIndex = 0;
+
+                index = 0;
+                while (index < subjectIDs.Count)
+                {
+                    subjectForCourceComboBox.Items.Add(subjects[index]);
+                    index++;
+                }
+                subjectForCourceComboBox.SelectedIndex = 0;
+
+                removeCourceButton.Enabled = true;
+                updatingCourceComboBoxes = false;
+            }
+        }
+
+        private void courcesGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = courcesGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = courcesGridView.Columns[e.ColumnIndex].Name;
+
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        columnName = "Name";
+                        break;
+                    default:
+                        break;
+                }
+
+                String strSQL = "UPDATE Cources SET " + columnName + " = ? WHERE CourseID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(courcesGridView.Rows[e.RowIndex].Cells[4].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshCourcesTable();
+            }
+            else
+            {
+                String name = courcesGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+                String strSQL = "INSERT INTO Cources (Name, SubjectID, TeacherID) VALUES (?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p3", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = name;
+                cmd.Parameters[1].Value = subjectIDs[subjectForCourceComboBox.SelectedIndex];
+                cmd.Parameters[2].Value = teacherIDs[teacherForCourceComboBox.SelectedIndex];
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshCourcesTable();
+            }
+        }
+
+        private void courcesGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            updatingCourceComboBoxes = true;
+
+            teacherForCourceComboBox.Items.Clear();
+            subjectForCourceComboBox.Items.Clear();
+
+            if (courcesGridView.SelectedRows.Count > 0)
+            {
+                Console.WriteLine(teacherIDs.Count);
+                Console.WriteLine(subjectIDs.Count);
+
+                int index = 0;
+                int selectedIndex1 = -1;
+                while (index < teacherIDs.Count)
+                {
+                    teacherForCourceComboBox.Items.Add(teachers[index]);
+
+                    if (teacherIDs[index] == Int32.Parse(courcesGridView.SelectedRows[0].Cells[5].Value.ToString()))
+                    {
+                        selectedIndex1 = index;
+                    }
+                    index++;
+                }
+                teacherForCourceComboBox.SelectedIndex = selectedIndex1;
+
+                index = 0;
+                int selectedIndex2 = -1;
+                while (index < subjectIDs.Count)
+                {
+                    subjectForCourceComboBox.Items.Add(subjects[index]);
+
+                    if (subjectIDs[index] == Int32.Parse(courcesGridView.SelectedRows[0].Cells[6].Value.ToString()))
+                    {
+                        selectedIndex2 = index;
+                    }
+                    index++;
+                }
+                subjectForCourceComboBox.SelectedIndex = selectedIndex2;
+
+                removeCourceButton.Enabled = true;
+            }
+            else
+            {
+                removeCourceButton.Enabled = false;
+
+            }
+            updatingCourceComboBoxes = false;
+        }
+
+        private void courcesGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+
+        }
+
+        private void removeCource(int index)
+        {
+            String strSQL = "DELETE FROM Cources WHERE CourseID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = courcesGridView.Rows[index].Cells[4].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeCourceButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < courcesGridView.SelectedRows.Count)
+            {
+                removeCource(courcesGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshCourcesTable();
+        }
+
+        private void teacherForCourceComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (courcesGridView.SelectedRows.Count > 0 && !updatingCourceComboBoxes)
+            {
+                String strSQL = "UPDATE Cources SET TeacherID = ? WHERE CourseID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = teacherIDs[teacherForCourceComboBox.SelectedIndex];
+                cmd.Parameters[1].Value = Int32.Parse(courcesGridView.SelectedRows[0].Cells[4].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshCourcesTable();
+            }
+        }
+
+        private void subjectForCourceComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (courcesGridView.SelectedRows.Count > 0 && !updatingCourceComboBoxes)
+            {
+                String strSQL = "UPDATE Cources SET SubjectID = ? WHERE CourseID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = subjectIDs[subjectForCourceComboBox.SelectedIndex];
+                cmd.Parameters[1].Value = Int32.Parse(courcesGridView.SelectedRows[0].Cells[4].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshCourcesTable();
+            }
         }
     }
 }
