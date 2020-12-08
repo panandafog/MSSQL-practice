@@ -23,6 +23,9 @@ namespace Cllient_app
         private Boolean updatingStudentGroupComboBox = false;
         private Boolean updatingGroupProgramComboBox = false;
         private Boolean updatingCourceComboBoxes = false;
+        private Boolean updatingBuildingForClassroomComboBox = false;
+
+
 
         private List<int> groupIDs;
         private List<String> groups;
@@ -39,6 +42,9 @@ namespace Cllient_app
         private List<int> subjectIDs;
         private List<String> subjects;
 
+        private List<int> buildingIDs;
+        private List<String> buildings;
+
         public DepartmentOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
             InitializeComponent();
@@ -47,7 +53,7 @@ namespace Cllient_app
             userInfoLabel.Text = this.userInfo.lastName + " " + this.userInfo.firstName;
 
             dataSet = new DataSet();
-
+            
             groupIDs = new List<int>();
             groups = new List<String>();
 
@@ -62,6 +68,9 @@ namespace Cllient_app
 
             subjectIDs = new List<int>();
             subjects = new List<String>();
+
+            buildingIDs = new List<int>();
+            buildings = new List<String>();
 
             this.connection = connection;
 
@@ -87,6 +96,9 @@ namespace Cllient_app
 
             initConferencesTable();
             refreshConferencesTable();
+
+            initClassroomsTable();
+            refreshClassroomsTable();
 
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
@@ -163,6 +175,19 @@ namespace Cllient_app
             {
                 subjects.Add(reader["Name"].ToString());
                 subjectIDs.Add(Int32.Parse(reader["SubjectID"].ToString()));
+            }
+
+            // Get buildings
+
+            strSQL = "SELECT * FROM Buildings";
+
+            command = new OleDbCommand(strSQL, connection);
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                buildings.Add(reader["Name"].ToString());
+                buildingIDs.Add(Int32.Parse(reader["BuildingID"].ToString()));
             }
         }
 
@@ -401,6 +426,36 @@ namespace Cllient_app
             adapter.Fill(dataSet, "Conferences");
         }
 
+        private void initClassroomsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Classrooms");
+            tmpTable.Columns.Add("Number", typeof(int));
+            tmpTable.Columns.Add("Floor", typeof(int));
+            tmpTable.Columns.Add("Building", typeof(String));
+            tmpTable.Columns.Add("ClassroomID", typeof(int));
+            tmpTable.Columns.Add("BuildingID", typeof(int));
+
+            classroomsGridView.DataSource = dataSet;
+            classroomsGridView.DataMember = "Classrooms";
+            classroomsGridView.Columns[3].Visible = false;
+            classroomsGridView.Columns[4].Visible = false;
+
+            classroomsGridView.Columns[2].ReadOnly = true;
+        }
+
+        private void refreshClassroomsTable()
+        {
+            dataSet.Tables["Classrooms"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "EXEC GetClassroomsWithBuildings";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Classrooms");
+        }
+
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
         {
             updatingStudentGroupComboBox = true;
@@ -526,7 +581,7 @@ namespace Cllient_app
                 cmd.Parameters[2].Value = email;
                 cmd.Parameters[3].Value = login;
                 cmd.Parameters[4].Value = password;
-                cmd.Parameters[5].Value = groupIDs[studentsGroupComboBox.SelectedIndex]; ;
+                cmd.Parameters[5].Value = groupIDs[studentsGroupComboBox.SelectedIndex];
 
                 try
                 {
@@ -1562,6 +1617,188 @@ namespace Cllient_app
             }
 
             refreshConferencesTable();
+        }
+
+        private void classroomsGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < classroomsGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+
+                buildingForClassroomComboBox.Items.Clear();
+
+                updatingBuildingForClassroomComboBox = true;
+                int index = 0;
+                while (index < buildingIDs.Count)
+                {
+                    buildingForClassroomComboBox.Items.Add(buildings[index]);
+                    index++;
+                }
+                buildingForClassroomComboBox.SelectedIndex = 0;
+
+                removeClassroomButton.Enabled = true;
+                updatingBuildingForClassroomComboBox = false;
+            }
+        }
+
+        private void classroomsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = classroomsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = classroomsGridView.Columns[e.ColumnIndex].Name;
+
+                String strSQL = "UPDATE Classrooms SET " + columnName + " = ? WHERE ClassroomID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(classroomsGridView.Rows[e.RowIndex].Cells[3].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshClassroomsTable();
+            }
+            else
+            {
+                int number = Int32.Parse(classroomsGridView.Rows[e.RowIndex].Cells[0].Value.ToString());
+                int floor = Int32.Parse(classroomsGridView.Rows[e.RowIndex].Cells[1].Value.ToString());
+
+                String strSQL = "INSERT INTO Classrooms (Number, Floor, BuildingID) VALUES (?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p3", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = number;
+                cmd.Parameters[1].Value = floor;
+                cmd.Parameters[2].Value = buildingIDs[buildingForClassroomComboBox.SelectedIndex];
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshClassroomsTable();
+            }
+        }
+
+        private void classroomsGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            updatingBuildingForClassroomComboBox = true;
+
+            buildingForClassroomComboBox.Items.Clear();
+
+            if (classroomsGridView.SelectedRows.Count > 0)
+            {
+                int index = 0;
+                int selectedIndex = -1;
+                while (index < buildingIDs.Count)
+                {
+                    buildingForClassroomComboBox.Items.Add(buildings[index]);
+
+                    if (buildingIDs[index] == Int32.Parse(classroomsGridView.Rows[classroomsGridView.SelectedRows[0].Index].Cells[4].Value.ToString()))
+                    {
+                        selectedIndex = index;
+                    }
+                    index++;
+                }
+                buildingForClassroomComboBox.SelectedIndex = selectedIndex;
+
+                removeBuildingButton.Enabled = true;
+            }
+            else
+            {
+                removeBuildingButton.Enabled = false;
+            }
+
+            updatingBuildingForClassroomComboBox = false;
+        }
+
+        private void buildingForClassroomComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (classroomsGridView.SelectedRows.Count > 0 && !updatingBuildingForClassroomComboBox)
+            {
+                String strSQL = "UPDATE Classrooms SET BuildingID = ? WHERE ClassroomID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = buildingIDs[buildingForClassroomComboBox.SelectedIndex];
+                cmd.Parameters[1].Value = Int32.Parse(classroomsGridView.SelectedRows[0].Cells[3].Value.ToString());
+
+                Console.WriteLine(buildingIDs[buildingForClassroomComboBox.SelectedIndex]);
+                Console.WriteLine(classroomsGridView.SelectedRows[0].Cells[3].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshClassroomsTable();
+            }
+        }
+
+        private void removeClassroom(int index)
+        {
+            String strSQL = "DELETE FROM Classrooms WHERE ClassroomID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = classroomsGridView.Rows[index].Cells[3].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeClassroomButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < classroomsGridView.SelectedRows.Count)
+            {
+                removeClassroom(classroomsGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshClassroomsTable();
+        }
+
+        private void classroomsGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells[0].Value = 0;
+            e.Row.Cells[1].Value = 0;
         }
     }
 }

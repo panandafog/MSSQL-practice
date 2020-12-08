@@ -493,6 +493,10 @@ namespace Cllient_app
             this.classroomsGridView.Name = "classroomsGridView";
             this.classroomsGridView.Size = new System.Drawing.Size(759, 172);
             this.classroomsGridView.TabIndex = 0;
+            this.classroomsGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.classroomsGridView_CellBeginEdit);
+            this.classroomsGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.classroomsGridView_CellEndEdit);
+            this.classroomsGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.classroomsGridView_DefaultValuesNeeded);
+            this.classroomsGridView.SelectionChanged += new System.EventHandler(this.classroomsGridView_SelectionChanged);
             // 
             // label7
             // 
@@ -530,6 +534,7 @@ namespace Cllient_app
             this.buildingForClassroomComboBox.Name = "buildingForClassroomComboBox";
             this.buildingForClassroomComboBox.Size = new System.Drawing.Size(121, 21);
             this.buildingForClassroomComboBox.TabIndex = 4;
+            this.buildingForClassroomComboBox.SelectedIndexChanged += new System.EventHandler(this.buildingForClassroomComboBox_SelectedIndexChanged);
             // 
             // label9
             // 
@@ -548,6 +553,7 @@ namespace Cllient_app
             this.removeClassroomButton.TabIndex = 6;
             this.removeClassroomButton.Text = "Remove";
             this.removeClassroomButton.UseVisualStyleBackColor = true;
+            this.removeClassroomButton.Click += new System.EventHandler(this.removeClassroomButton_Click);
             // 
             // removeConferenceButton
             // 
