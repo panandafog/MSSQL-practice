@@ -63,6 +63,9 @@ namespace Cllient_app
 
             initCourcesForGroupTable();
 
+            initSubjectsTable();
+            refreshSubjectsTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
             removeGroupButton.Enabled = false;
@@ -235,6 +238,30 @@ namespace Cllient_app
                 adapter = new OleDbDataAdapter(strSQL, connection);
                 adapter.Fill(dataSet, "CourcesForGroup");
             }
+        }
+
+        private void initSubjectsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Subjects");
+            tmpTable.Columns.Add("Name", typeof(String));
+            tmpTable.Columns.Add("SubjectID", typeof(int));
+
+            subjectsGridView.DataSource = dataSet;
+            subjectsGridView.DataMember = "Subjects";
+            subjectsGridView.Columns[1].Visible = false;
+        }
+
+        private void refreshSubjectsTable()
+        {
+            dataSet.Tables["Subjects"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "SELECT * FROM Subjects";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Subjects");
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
@@ -828,6 +855,115 @@ namespace Cllient_app
             }
 
             refreshCourcesForGroupTable();
+        }
+
+        private void subjectsGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < subjectsGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+            }
+        }
+
+        private void subjectsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = subjectsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = subjectsGridView.Columns[e.ColumnIndex].Name;
+
+                String strSQL = "UPDATE Subjects SET " + columnName + " = ? WHERE SubjectID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(subjectsGridView.Rows[e.RowIndex].Cells[1].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshSubjectsTable();
+            }
+            else
+            {
+                String name = subjectsGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+
+                String strSQL = "INSERT INTO Subjects (Name) VALUES (?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+
+                cmd.Parameters[0].Value = name;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshSubjectsTable();
+            }
+        }
+
+        private void subjectsGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (subjectsGridView.SelectedRows.Count > 0)
+            {
+                removeSubjectButton.Enabled = true;
+            }
+            else
+            {
+                removeSubjectButton.Enabled = false;
+            }
+        }
+
+        private void removeSubject(int index)
+        {
+            String strSQL = "DELETE FROM Subjects WHERE SubjectID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = subjectsGridView.Rows[index].Cells[1].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeSubjectButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < subjectsGridView.SelectedRows.Count)
+            {
+                removeSubject(subjectsGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshSubjectsTable();
         }
     }
 }
