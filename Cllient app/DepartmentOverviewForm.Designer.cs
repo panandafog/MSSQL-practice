@@ -44,11 +44,23 @@ namespace Cllient_app
             this.removeStudentButton = new System.Windows.Forms.Button();
             this.removeTeacherButton = new System.Windows.Forms.Button();
             this.teachersGridView = new System.Windows.Forms.DataGridView();
+            this.groupsGridView = new System.Windows.Forms.DataGridView();
+            this.removeGroupButton = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.courcesForGroupGridView = new System.Windows.Forms.DataGridView();
+            this.removeCourceForGroupButton = new System.Windows.Forms.Button();
+            this.addCourceForGroupComboBox = new System.Windows.Forms.ComboBox();
+            this.addCourceForGroupButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.programOfGroupComboBox = new System.Windows.Forms.ComboBox();
             this.mainTabControl.SuspendLayout();
             this.studentsTabPage.SuspendLayout();
+            this.groupsTabPage.SuspendLayout();
             this.teachersTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.teachersGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupsGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.courcesForGroupGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -91,6 +103,15 @@ namespace Cllient_app
             // 
             // groupsTabPage
             // 
+            this.groupsTabPage.Controls.Add(this.label3);
+            this.groupsTabPage.Controls.Add(this.programOfGroupComboBox);
+            this.groupsTabPage.Controls.Add(this.addCourceForGroupButton);
+            this.groupsTabPage.Controls.Add(this.addCourceForGroupComboBox);
+            this.groupsTabPage.Controls.Add(this.removeCourceForGroupButton);
+            this.groupsTabPage.Controls.Add(this.courcesForGroupGridView);
+            this.groupsTabPage.Controls.Add(this.label2);
+            this.groupsTabPage.Controls.Add(this.removeGroupButton);
+            this.groupsTabPage.Controls.Add(this.groupsGridView);
             this.groupsTabPage.Location = new System.Drawing.Point(4, 22);
             this.groupsTabPage.Name = "groupsTabPage";
             this.groupsTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -187,7 +208,7 @@ namespace Cllient_app
             // 
             // removeTeacherButton
             // 
-            this.removeTeacherButton.Location = new System.Drawing.Point(690, 362);
+            this.removeTeacherButton.Location = new System.Drawing.Point(689, 363);
             this.removeTeacherButton.Name = "removeTeacherButton";
             this.removeTeacherButton.Size = new System.Drawing.Size(75, 23);
             this.removeTeacherButton.TabIndex = 5;
@@ -198,13 +219,102 @@ namespace Cllient_app
             // teachersGridView
             // 
             this.teachersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.teachersGridView.Location = new System.Drawing.Point(3, 2);
+            this.teachersGridView.Location = new System.Drawing.Point(2, 3);
             this.teachersGridView.Name = "teachersGridView";
             this.teachersGridView.Size = new System.Drawing.Size(762, 354);
             this.teachersGridView.TabIndex = 4;
             this.teachersGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.teachersGridView_CellBeginEdit);
             this.teachersGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.teachersGridView_CellEndEdit);
             this.teachersGridView.SelectionChanged += new System.EventHandler(this.teachersGridView_SelectionChanged);
+            // 
+            // groupsGridView
+            // 
+            this.groupsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.groupsGridView.Location = new System.Drawing.Point(6, 3);
+            this.groupsGridView.Name = "groupsGridView";
+            this.groupsGridView.Size = new System.Drawing.Size(759, 164);
+            this.groupsGridView.TabIndex = 5;
+            this.groupsGridView.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.groupsGridView_CellBeginEdit);
+            this.groupsGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.groupsGridView_CellEndEdit);
+            this.groupsGridView.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.groupsGridView_DefaultValuesNeeded);
+            this.groupsGridView.SelectionChanged += new System.EventHandler(this.groupsGridView_SelectionChanged);
+            // 
+            // removeGroupButton
+            // 
+            this.removeGroupButton.Location = new System.Drawing.Point(690, 173);
+            this.removeGroupButton.Name = "removeGroupButton";
+            this.removeGroupButton.Size = new System.Drawing.Size(75, 23);
+            this.removeGroupButton.TabIndex = 6;
+            this.removeGroupButton.Text = "Remove";
+            this.removeGroupButton.UseVisualStyleBackColor = true;
+            this.removeGroupButton.Click += new System.EventHandler(this.removeGroupButton_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 178);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Cources";
+            // 
+            // courcesForGroupGridView
+            // 
+            this.courcesForGroupGridView.AllowUserToAddRows = false;
+            this.courcesForGroupGridView.AllowUserToDeleteRows = false;
+            this.courcesForGroupGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.courcesForGroupGridView.Location = new System.Drawing.Point(6, 202);
+            this.courcesForGroupGridView.Name = "courcesForGroupGridView";
+            this.courcesForGroupGridView.ReadOnly = true;
+            this.courcesForGroupGridView.Size = new System.Drawing.Size(759, 152);
+            this.courcesForGroupGridView.TabIndex = 8;
+            this.courcesForGroupGridView.SelectionChanged += new System.EventHandler(this.courcesForGroupGridView_SelectionChanged);
+            // 
+            // removeCourceForGroupButton
+            // 
+            this.removeCourceForGroupButton.Location = new System.Drawing.Point(690, 360);
+            this.removeCourceForGroupButton.Name = "removeCourceForGroupButton";
+            this.removeCourceForGroupButton.Size = new System.Drawing.Size(75, 23);
+            this.removeCourceForGroupButton.TabIndex = 9;
+            this.removeCourceForGroupButton.Text = "Remove";
+            this.removeCourceForGroupButton.UseVisualStyleBackColor = true;
+            this.removeCourceForGroupButton.Click += new System.EventHandler(this.removeCourceForGroupButton_Click);
+            // 
+            // addCourceForGroupComboBox
+            // 
+            this.addCourceForGroupComboBox.FormattingEnabled = true;
+            this.addCourceForGroupComboBox.Location = new System.Drawing.Point(6, 360);
+            this.addCourceForGroupComboBox.Name = "addCourceForGroupComboBox";
+            this.addCourceForGroupComboBox.Size = new System.Drawing.Size(121, 21);
+            this.addCourceForGroupComboBox.TabIndex = 10;
+            // 
+            // addCourceForGroupButton
+            // 
+            this.addCourceForGroupButton.Location = new System.Drawing.Point(133, 360);
+            this.addCourceForGroupButton.Name = "addCourceForGroupButton";
+            this.addCourceForGroupButton.Size = new System.Drawing.Size(75, 23);
+            this.addCourceForGroupButton.TabIndex = 11;
+            this.addCourceForGroupButton.Text = "Add cource";
+            this.addCourceForGroupButton.UseVisualStyleBackColor = true;
+            this.addCourceForGroupButton.Click += new System.EventHandler(this.addCourceForGroupButton_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(508, 178);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Program:";
+            // 
+            // programOfGroupComboBox
+            // 
+            this.programOfGroupComboBox.FormattingEnabled = true;
+            this.programOfGroupComboBox.Location = new System.Drawing.Point(563, 175);
+            this.programOfGroupComboBox.Name = "programOfGroupComboBox";
+            this.programOfGroupComboBox.Size = new System.Drawing.Size(121, 21);
+            this.programOfGroupComboBox.TabIndex = 12;
+            this.programOfGroupComboBox.SelectedIndexChanged += new System.EventHandler(this.programOfGroupComboBox_SelectedIndexChanged);
             // 
             // DepartmentOverviewForm
             // 
@@ -219,9 +329,13 @@ namespace Cllient_app
             this.mainTabControl.ResumeLayout(false);
             this.studentsTabPage.ResumeLayout(false);
             this.studentsTabPage.PerformLayout();
+            this.groupsTabPage.ResumeLayout(false);
+            this.groupsTabPage.PerformLayout();
             this.teachersTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.studentsGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.teachersGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupsGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.courcesForGroupGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -244,5 +358,14 @@ namespace Cllient_app
         private System.Windows.Forms.TabPage buildingsTabPage;
         private System.Windows.Forms.Button removeTeacherButton;
         private System.Windows.Forms.DataGridView teachersGridView;
+        private System.Windows.Forms.Button removeCourceForGroupButton;
+        private System.Windows.Forms.DataGridView courcesForGroupGridView;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button removeGroupButton;
+        private System.Windows.Forms.DataGridView groupsGridView;
+        private System.Windows.Forms.Button addCourceForGroupButton;
+        private System.Windows.Forms.ComboBox addCourceForGroupComboBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox programOfGroupComboBox;
     }
 }

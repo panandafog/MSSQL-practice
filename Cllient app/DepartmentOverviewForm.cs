@@ -21,9 +21,16 @@ namespace Cllient_app
 
         private Boolean editingLastRow = false;
         private Boolean updatingStudentGroupComboBox = false;
+        private Boolean updatingGroupProgramComboBox = false;
 
         private List<int> groupIDs;
         private List<String> groups;
+
+        private List<int> programIDs;
+        private List<String> programs;
+
+        private List<int> courceIDs;
+        private List<String> cources;
 
         public DepartmentOverviewForm(UserInfo userInfo, OleDbConnection connection)
         {
@@ -37,6 +44,12 @@ namespace Cllient_app
             groupIDs = new List<int>();
             groups = new List<String>();
 
+            programIDs = new List<int>();
+            programs = new List<String>();
+
+            courceIDs = new List<int>();
+            cources = new List<String>();
+
             this.connection = connection;
 
             initStudentsTable();
@@ -45,8 +58,17 @@ namespace Cllient_app
             initTeachersTable();
             refreshTeachersTable();
 
+            initGroupsTable();
+            refreshGroupsTable();
+
+            initCourcesForGroupTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
+            removeGroupButton.Enabled = false;
+            removeCourceForGroupButton.Enabled = false;
+
+            addCourceForGroupButton.Enabled = false;
 
             // Get groups
 
@@ -59,6 +81,33 @@ namespace Cllient_app
             {
                 groups.Add(reader["Name"].ToString());
                 groupIDs.Add(Int32.Parse(reader["GroupID"].ToString()));
+            }
+
+            // Get programs
+
+            strSQL = "SELECT * FROM Programs";
+
+            command = new OleDbCommand(strSQL, connection);
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                programs.Add(reader["Name"].ToString());
+                programIDs.Add(Int32.Parse(reader["ProgramID"].ToString()));
+            }
+
+            // Get cources
+
+            strSQL = "SELECT * FROM Cources";
+
+            command = new OleDbCommand(strSQL, connection);
+            reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                cources.Add(reader["Name"].ToString());
+                courceIDs.Add(Int32.Parse(reader["CourseID"].ToString()));
+                addCourceForGroupComboBox.Items.Add(cources.Last<string>());
             }
         }
 
@@ -125,6 +174,67 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Teachers");
+        }
+
+        private void initGroupsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("Groups");
+            tmpTable.Columns.Add("Group", typeof(String));
+            tmpTable.Columns.Add("Year", typeof(int));
+            tmpTable.Columns.Add("Program", typeof(String));
+            tmpTable.Columns.Add("ProgramID", typeof(int));
+            tmpTable.Columns.Add("GroupID", typeof(int));
+
+            groupsGridView.DataSource = dataSet;
+            groupsGridView.DataMember = "Groups";
+            groupsGridView.Columns[3].Visible = false;
+            groupsGridView.Columns[4].Visible = false;
+
+            groupsGridView.Columns[3].ReadOnly = true;
+        }
+
+        private void refreshGroupsTable()
+        {
+            dataSet.Tables["Groups"].Clear();
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            String strSQL = "EXEC GetGroupsWithPrograms";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "Groups");
+        }
+
+        private void initCourcesForGroupTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("CourcesForGroup");
+            tmpTable.Columns.Add("Cource name", typeof(String));
+            tmpTable.Columns.Add("Subject", typeof(String));
+            tmpTable.Columns.Add("Teacher's first name", typeof(String));
+            tmpTable.Columns.Add("Teacher's last name", typeof(String));
+            tmpTable.Columns.Add("CourseID", typeof(int));
+
+            courcesForGroupGridView.DataSource = dataSet;
+            courcesForGroupGridView.DataMember = "CourcesForGroup";
+
+            courcesForGroupGridView.Columns[4].Visible = false;
+        }
+
+        private void refreshCourcesForGroupTable()
+        {
+            if (groupsGridView.SelectedRows.Count > 0)
+            {
+                dataSet.Tables["CourcesForGroup"].Clear();
+
+                System.Data.OleDb.OleDbDataAdapter adapter;
+
+                String strSQL = "EXEC GetCourcesForGroup @groupID = " + groupsGridView.SelectedRows[0].Cells[4].Value.ToString();
+
+                adapter = new OleDbDataAdapter(strSQL, connection);
+                adapter.Fill(dataSet, "CourcesForGroup");
+            }
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)
@@ -459,6 +569,265 @@ namespace Cllient_app
             }
 
             refreshTeachersTable();
+        }
+
+        private void groupsGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.RowIndex < groupsGridView.Rows.Count - 1)
+            {
+                editingLastRow = false;
+            }
+            else
+            {
+                editingLastRow = true;
+
+                programOfGroupComboBox.Items.Clear();
+
+                updatingGroupProgramComboBox = true;
+                int index = 0;
+                while (index < programIDs.Count)
+                {
+                    programOfGroupComboBox.Items.Add(programs[index]);
+                    index++;
+                }
+                programOfGroupComboBox.SelectedIndex = 0;
+
+                removeGroupButton.Enabled = true;
+                updatingGroupProgramComboBox = false;
+            }
+        }
+
+        private void groupsGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (!editingLastRow)
+            {
+
+                String newValue = groupsGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                String columnName = groupsGridView.Columns[e.ColumnIndex].Name;
+
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        columnName = "Name";
+                        break;
+                    default:
+                        break;
+                }
+
+                String strSQL = "UPDATE Groups SET " + columnName + " = ? WHERE GroupID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = newValue;
+                cmd.Parameters[1].Value = Int32.Parse(groupsGridView.Rows[e.RowIndex].Cells[4].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshGroupsTable();
+            }
+            else
+            {
+                String name = groupsGridView.Rows[e.RowIndex].Cells[0].Value.ToString();
+                int year = Int32.Parse(groupsGridView.Rows[e.RowIndex].Cells[1].Value.ToString());
+
+                String strSQL = "INSERT INTO Groups (Name, Year, ProgramID) VALUES (?, ?, ?)";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.VarWChar, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p3", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = name;
+                cmd.Parameters[1].Value = year;
+                cmd.Parameters[2].Value = programIDs[programOfGroupComboBox.SelectedIndex]; ;
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshGroupsTable();
+            }
+        }
+
+        private void groupsGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            updatingGroupProgramComboBox = true;
+
+            programOfGroupComboBox.Items.Clear();
+
+            if (groupsGridView.SelectedRows.Count > 0)
+            {
+                int index = 0;
+                int selectedIndex = -1;
+                while (index < programIDs.Count)
+                {
+                    programOfGroupComboBox.Items.Add(programs[index]);
+
+                    if (programIDs[index] == Int32.Parse(groupsGridView.Rows[groupsGridView.SelectedRows[0].Index].Cells[3].Value.ToString()))
+                    {
+                        selectedIndex = index;
+                    }
+                    index++;
+                }
+                programOfGroupComboBox.SelectedIndex = selectedIndex;
+
+                removeGroupButton.Enabled = true;
+                addCourceForGroupButton.Enabled = true;
+
+                refreshCourcesForGroupTable();
+            }
+            else
+            {
+                removeGroupButton.Enabled = false;
+                addCourceForGroupButton.Enabled = false;
+            }
+            updatingGroupProgramComboBox = false;
+        }
+
+        private void removeGroup(int index)
+        {
+            String strSQL = "DELETE FROM Groups WHERE GroupID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = groupsGridView.Rows[index].Cells[4].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeGroupButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < groupsGridView.SelectedRows.Count)
+            {
+                removeGroup(groupsGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshGroupsTable();
+        }
+
+        private void programOfGroupComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (groupsGridView.SelectedRows.Count > 0 && !updatingGroupProgramComboBox)
+            {
+                String strSQL = "UPDATE Groups SET ProgramID = ? WHERE GroupID = ?";
+                OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+                cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+                cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+                cmd.Parameters[0].Value = programIDs[programOfGroupComboBox.SelectedIndex];
+                cmd.Parameters[1].Value = Int32.Parse(groupsGridView.SelectedRows[0].Cells[4].Value.ToString());
+
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch (OleDbException exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
+
+                refreshGroupsTable();
+            }
+        }
+
+        private void courcesForGroupGridView_SelectionChanged(object sender, EventArgs e)
+        {
+            if (courcesForGroupGridView.SelectedRows.Count > 0)
+            {
+                removeCourceForGroupButton.Enabled = true;
+            }
+            else
+            {
+                removeCourceForGroupButton.Enabled = false;
+            }
+        }
+
+        private void groupsGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells[1].Value = 1;
+        }
+
+        private void removeCourceForGroup(int index)
+        {
+            String strSQL = "DELETE FROM [Groups-Cources] WHERE GroupID = ? AND CourceID = ?";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+            cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = groupsGridView.SelectedRows[0].Cells[4].Value;
+            cmd.Parameters[1].Value = courcesForGroupGridView.Rows[index].Cells[4].Value;
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void removeCourceForGroupButton_Click(object sender, EventArgs e)
+        {
+            int index = 0;
+
+            while (index < courcesForGroupGridView.SelectedRows.Count)
+            {
+                removeCourceForGroup(courcesForGroupGridView.SelectedRows[index].Index);
+                index++;
+            }
+
+            refreshCourcesForGroupTable();
+        }
+
+        private void addCourceForGroupButton_Click(object sender, EventArgs e)
+        {
+            String strSQL = "INSERT INTO [Groups-Cources] (GroupID, CourceID) VALUES (?, ?)";
+            OleDbCommand cmd = new OleDbCommand(strSQL, connection);
+
+            cmd.Parameters.Add("@p1", OleDbType.Integer, 50);
+            cmd.Parameters.Add("@p2", OleDbType.Integer, 50);
+
+            cmd.Parameters[0].Value = groupsGridView.SelectedRows[0].Cells[4].Value;
+            cmd.Parameters[1].Value = courceIDs[addCourceForGroupComboBox.SelectedIndex];
+
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OleDbException exc)
+            {
+               // MessageBox.Show(exc.ToString());
+            }
+
+            refreshCourcesForGroupTable();
         }
     }
 }
