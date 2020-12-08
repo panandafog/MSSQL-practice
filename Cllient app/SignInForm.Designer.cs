@@ -40,6 +40,8 @@ namespace Cllient_app
             // 
             // loginTextBox
             // 
+            this.loginTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.loginTextBox.Location = new System.Drawing.Point(405, 103);
             this.loginTextBox.Name = "loginTextBox";
             this.loginTextBox.Size = new System.Drawing.Size(100, 20);
@@ -47,6 +49,8 @@ namespace Cllient_app
             // 
             // passwordTextBox
             // 
+            this.passwordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.passwordTextBox.Location = new System.Drawing.Point(405, 155);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(100, 20);
@@ -72,6 +76,8 @@ namespace Cllient_app
             // 
             // signInButton
             // 
+            this.signInButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.signInButton.Location = new System.Drawing.Point(356, 280);
             this.signInButton.Name = "signInButton";
             this.signInButton.Size = new System.Drawing.Size(75, 23);
@@ -82,6 +88,8 @@ namespace Cllient_app
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(277, 215);
             this.label3.Name = "label3";
@@ -91,6 +99,9 @@ namespace Cllient_app
             // 
             // accountTypeComboBox
             // 
+            this.accountTypeComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.accountTypeComboBox.FormattingEnabled = true;
             this.accountTypeComboBox.Location = new System.Drawing.Point(405, 212);
             this.accountTypeComboBox.Name = "accountTypeComboBox";
