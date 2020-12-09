@@ -125,6 +125,10 @@ namespace Cllient_app
 
             initStudentsOnEventTable();
 
+            showStudentsStatsTable();
+            showGroupsStatsTable();
+            showCourcesStatsTable();
+
             removeStudentButton.Enabled = false;
             removeTeacherButton.Enabled = false;
             removeGroupButton.Enabled = false;
@@ -628,6 +632,60 @@ namespace Cllient_app
                 adapter = new OleDbDataAdapter(strSQL, connection);
                 adapter.Fill(dataSet, "StudentsOnEvent");
             }
+        }
+
+        private void showStudentsStatsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("StudentsStats");
+
+            studentsStatsGridView.DataSource = dataSet;
+            studentsStatsGridView.DataMember = "StudentsStats";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["StudentsStats"].Clear();
+
+            String strSQL = "EXEC GetStudentsStats";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "StudentsStats");
+        }
+
+        private void showGroupsStatsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("GroupsStats");
+
+            groupsStatsGridView.DataSource = dataSet;
+            groupsStatsGridView.DataMember = "GroupsStats";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["GroupsStats"].Clear();
+
+            String strSQL = "EXEC GetGroupsStats";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "GroupsStats");
+        }
+
+        private void showCourcesStatsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("CourcesStats");
+
+            courcesStatsGridView.DataSource = dataSet;
+            courcesStatsGridView.DataMember = "CourcesStats";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["CourcesStats"].Clear();
+
+            String strSQL = "EXEC GetCourcesStats";
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "CourcesStats");
         }
 
         private void studentsGridView_SelectionChanged(object sender, EventArgs e)

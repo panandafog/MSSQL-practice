@@ -42,11 +42,19 @@ namespace Cllient_app
             this.tasksGridView = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
+            this.groupsAverageMarksTabPage = new System.Windows.Forms.TabPage();
+            this.averageMarksGridView = new System.Windows.Forms.DataGridView();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.taskPassGridView = new System.Windows.Forms.DataGridView();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
             this.tasksTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).BeginInit();
+            this.groupsAverageMarksTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.averageMarksGridView)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.taskPassGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -62,6 +70,8 @@ namespace Cllient_app
             // 
             this.mainTabControl.Controls.Add(this.timetableTabPage);
             this.mainTabControl.Controls.Add(this.tasksTabPage);
+            this.mainTabControl.Controls.Add(this.groupsAverageMarksTabPage);
+            this.mainTabControl.Controls.Add(this.tabPage1);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -194,6 +204,48 @@ namespace Cllient_app
             this.tasksSubjectComboBox.TabIndex = 6;
             this.tasksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.tasksSubjectComboBox_SelectedIndexChanged);
             // 
+            // groupsAverageMarksTabPage
+            // 
+            this.groupsAverageMarksTabPage.Controls.Add(this.averageMarksGridView);
+            this.groupsAverageMarksTabPage.Location = new System.Drawing.Point(4, 22);
+            this.groupsAverageMarksTabPage.Name = "groupsAverageMarksTabPage";
+            this.groupsAverageMarksTabPage.Size = new System.Drawing.Size(768, 387);
+            this.groupsAverageMarksTabPage.TabIndex = 2;
+            this.groupsAverageMarksTabPage.Text = "Average marks";
+            this.groupsAverageMarksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // averageMarksGridView
+            // 
+            this.averageMarksGridView.AllowUserToAddRows = false;
+            this.averageMarksGridView.AllowUserToDeleteRows = false;
+            this.averageMarksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.averageMarksGridView.Location = new System.Drawing.Point(3, 3);
+            this.averageMarksGridView.Name = "averageMarksGridView";
+            this.averageMarksGridView.ReadOnly = true;
+            this.averageMarksGridView.Size = new System.Drawing.Size(762, 381);
+            this.averageMarksGridView.TabIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.taskPassGridView);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(768, 387);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Task pass percentage";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // taskPassGridView
+            // 
+            this.taskPassGridView.AllowUserToAddRows = false;
+            this.taskPassGridView.AllowUserToDeleteRows = false;
+            this.taskPassGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.taskPassGridView.Location = new System.Drawing.Point(3, 3);
+            this.taskPassGridView.Name = "taskPassGridView";
+            this.taskPassGridView.ReadOnly = true;
+            this.taskPassGridView.Size = new System.Drawing.Size(762, 381);
+            this.taskPassGridView.TabIndex = 1;
+            // 
             // TeacherOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -211,6 +263,10 @@ namespace Cllient_app
             this.tasksTabPage.ResumeLayout(false);
             this.tasksTabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).EndInit();
+            this.groupsAverageMarksTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.averageMarksGridView)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.taskPassGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -231,5 +287,9 @@ namespace Cllient_app
         private System.Windows.Forms.Button deleteTaskButton;
         private System.Windows.Forms.Button reportsButton;
         private System.Windows.Forms.Button marksButton;
+        private System.Windows.Forms.TabPage groupsAverageMarksTabPage;
+        private System.Windows.Forms.DataGridView averageMarksGridView;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.DataGridView taskPassGridView;
     }
 }

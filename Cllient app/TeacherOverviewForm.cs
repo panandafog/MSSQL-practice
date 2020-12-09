@@ -42,6 +42,9 @@ namespace Cllient_app
 
             initSubjectComboBox();
             initTasksTable();
+
+            showAverageMarksTable();
+            showTasksPassTable();
         }
 
         private void TeacherOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -140,6 +143,44 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Tasks");
+        }
+
+        private void showAverageMarksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("AverageMarks");
+
+            averageMarksGridView.DataSource = dataSet;
+            averageMarksGridView.DataMember = "AverageMarks";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["AverageMarks"].Clear();
+
+            String strSQL = "EXEC GetGroupsAverageMarksForTeacher @teacherID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "AverageMarks");
+        }
+
+        private void showTasksPassTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("TasksPass");
+
+            taskPassGridView.DataSource = dataSet;
+            taskPassGridView.DataMember = "TasksPass";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["TasksPass"].Clear();
+
+            String strSQL = "EXEC GetTaskPassPercentage @teacherID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "TasksPass");
         }
 
         private void tasksGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)

@@ -36,17 +36,25 @@ namespace Cllient_app
             this.examsCheckBox = new System.Windows.Forms.CheckBox();
             this.timetableGridView = new System.Windows.Forms.DataGridView();
             this.marksTabPage = new System.Windows.Forms.TabPage();
-            this.marksSubjectComboBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.marksGridView = new System.Windows.Forms.DataGridView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.marksSubjectComboBox = new System.Windows.Forms.ComboBox();
             this.tasksTabPage = new System.Windows.Forms.TabPage();
+            this.reportsButton = new System.Windows.Forms.Button();
             this.tasksGridView = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.tasksSubjectComboBox = new System.Windows.Forms.ComboBox();
-            this.reportsButton = new System.Windows.Forms.Button();
             this.eventsTabPage = new System.Windows.Forms.TabPage();
-            this.eventsGridView = new System.Windows.Forms.DataGridView();
             this.signOutButton = new System.Windows.Forms.Button();
+            this.eventsGridView = new System.Windows.Forms.DataGridView();
+            this.marksForReportsTabPage = new System.Windows.Forms.TabPage();
+            this.marksForReportsGridView = new System.Windows.Forms.DataGridView();
+            this.missedTasksTabPage = new System.Windows.Forms.TabPage();
+            this.missedTasksGridView = new System.Windows.Forms.DataGridView();
+            this.failedTasksTabPage = new System.Windows.Forms.TabPage();
+            this.failedTasksGridView = new System.Windows.Forms.DataGridView();
+            this.commentedTasksTabPage = new System.Windows.Forms.TabPage();
+            this.commentedTasksGridView = new System.Windows.Forms.DataGridView();
             this.mainTabControl.SuspendLayout();
             this.timetableTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.timetableGridView)).BeginInit();
@@ -56,6 +64,14 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).BeginInit();
             this.eventsTabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.eventsGridView)).BeginInit();
+            this.marksForReportsTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.marksForReportsGridView)).BeginInit();
+            this.missedTasksTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.missedTasksGridView)).BeginInit();
+            this.failedTasksTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.failedTasksGridView)).BeginInit();
+            this.commentedTasksTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.commentedTasksGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // userInfoLabel
@@ -73,6 +89,10 @@ namespace Cllient_app
             this.mainTabControl.Controls.Add(this.marksTabPage);
             this.mainTabControl.Controls.Add(this.tasksTabPage);
             this.mainTabControl.Controls.Add(this.eventsTabPage);
+            this.mainTabControl.Controls.Add(this.marksForReportsTabPage);
+            this.mainTabControl.Controls.Add(this.missedTasksTabPage);
+            this.mainTabControl.Controls.Add(this.failedTasksTabPage);
+            this.mainTabControl.Controls.Add(this.commentedTasksTabPage);
             this.mainTabControl.Location = new System.Drawing.Point(12, 12);
             this.mainTabControl.Name = "mainTabControl";
             this.mainTabControl.SelectedIndex = 0;
@@ -137,24 +157,6 @@ namespace Cllient_app
             this.marksTabPage.Text = "Marks";
             this.marksTabPage.UseVisualStyleBackColor = true;
             // 
-            // marksSubjectComboBox
-            // 
-            this.marksSubjectComboBox.FormattingEnabled = true;
-            this.marksSubjectComboBox.Location = new System.Drawing.Point(59, 4);
-            this.marksSubjectComboBox.Name = "marksSubjectComboBox";
-            this.marksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
-            this.marksSubjectComboBox.TabIndex = 0;
-            this.marksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.marksSubjectComboBox_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Subject:";
-            // 
             // marksGridView
             // 
             this.marksGridView.AllowUserToAddRows = false;
@@ -166,6 +168,24 @@ namespace Cllient_app
             this.marksGridView.ReadOnly = true;
             this.marksGridView.Size = new System.Drawing.Size(752, 350);
             this.marksGridView.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Subject:";
+            // 
+            // marksSubjectComboBox
+            // 
+            this.marksSubjectComboBox.FormattingEnabled = true;
+            this.marksSubjectComboBox.Location = new System.Drawing.Point(59, 4);
+            this.marksSubjectComboBox.Name = "marksSubjectComboBox";
+            this.marksSubjectComboBox.Size = new System.Drawing.Size(308, 21);
+            this.marksSubjectComboBox.TabIndex = 0;
+            this.marksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.marksSubjectComboBox_SelectedIndexChanged);
             // 
             // tasksTabPage
             // 
@@ -179,6 +199,16 @@ namespace Cllient_app
             this.tasksTabPage.TabIndex = 2;
             this.tasksTabPage.Text = "Tasks";
             this.tasksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // reportsButton
+            // 
+            this.reportsButton.Location = new System.Drawing.Point(687, 361);
+            this.reportsButton.Name = "reportsButton";
+            this.reportsButton.Size = new System.Drawing.Size(75, 23);
+            this.reportsButton.TabIndex = 6;
+            this.reportsButton.Text = "Reports";
+            this.reportsButton.UseVisualStyleBackColor = true;
+            this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
             // 
             // tasksGridView
             // 
@@ -212,16 +242,6 @@ namespace Cllient_app
             this.tasksSubjectComboBox.TabIndex = 3;
             this.tasksSubjectComboBox.SelectedIndexChanged += new System.EventHandler(this.tasksSubjectComboBox_SelectedIndexChanged);
             // 
-            // reportsButton
-            // 
-            this.reportsButton.Location = new System.Drawing.Point(687, 361);
-            this.reportsButton.Name = "reportsButton";
-            this.reportsButton.Size = new System.Drawing.Size(75, 23);
-            this.reportsButton.TabIndex = 6;
-            this.reportsButton.Text = "Reports";
-            this.reportsButton.UseVisualStyleBackColor = true;
-            this.reportsButton.Click += new System.EventHandler(this.reportsButton_Click);
-            // 
             // eventsTabPage
             // 
             this.eventsTabPage.Controls.Add(this.signOutButton);
@@ -232,6 +252,16 @@ namespace Cllient_app
             this.eventsTabPage.TabIndex = 3;
             this.eventsTabPage.Text = "Events";
             this.eventsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // signOutButton
+            // 
+            this.signOutButton.Location = new System.Drawing.Point(690, 361);
+            this.signOutButton.Name = "signOutButton";
+            this.signOutButton.Size = new System.Drawing.Size(75, 23);
+            this.signOutButton.TabIndex = 1;
+            this.signOutButton.Text = "Sign out";
+            this.signOutButton.UseVisualStyleBackColor = true;
+            this.signOutButton.Click += new System.EventHandler(this.signOutButton_Click);
             // 
             // eventsGridView
             // 
@@ -245,15 +275,89 @@ namespace Cllient_app
             this.eventsGridView.TabIndex = 0;
             this.eventsGridView.SelectionChanged += new System.EventHandler(this.eventsGridView_SelectionChanged);
             // 
-            // signOutButton
+            // marksForReportsTabPage
             // 
-            this.signOutButton.Location = new System.Drawing.Point(690, 361);
-            this.signOutButton.Name = "signOutButton";
-            this.signOutButton.Size = new System.Drawing.Size(75, 23);
-            this.signOutButton.TabIndex = 1;
-            this.signOutButton.Text = "Sign out";
-            this.signOutButton.UseVisualStyleBackColor = true;
-            this.signOutButton.Click += new System.EventHandler(this.signOutButton_Click);
+            this.marksForReportsTabPage.Controls.Add(this.marksForReportsGridView);
+            this.marksForReportsTabPage.Location = new System.Drawing.Point(4, 22);
+            this.marksForReportsTabPage.Name = "marksForReportsTabPage";
+            this.marksForReportsTabPage.Size = new System.Drawing.Size(768, 387);
+            this.marksForReportsTabPage.TabIndex = 4;
+            this.marksForReportsTabPage.Text = "Marks for reports";
+            this.marksForReportsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // marksForReportsGridView
+            // 
+            this.marksForReportsGridView.AllowUserToAddRows = false;
+            this.marksForReportsGridView.AllowUserToDeleteRows = false;
+            this.marksForReportsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.marksForReportsGridView.Location = new System.Drawing.Point(3, 3);
+            this.marksForReportsGridView.Name = "marksForReportsGridView";
+            this.marksForReportsGridView.ReadOnly = true;
+            this.marksForReportsGridView.Size = new System.Drawing.Size(762, 381);
+            this.marksForReportsGridView.TabIndex = 0;
+            // 
+            // missedTasksTabPage
+            // 
+            this.missedTasksTabPage.Controls.Add(this.missedTasksGridView);
+            this.missedTasksTabPage.Location = new System.Drawing.Point(4, 22);
+            this.missedTasksTabPage.Name = "missedTasksTabPage";
+            this.missedTasksTabPage.Size = new System.Drawing.Size(768, 387);
+            this.missedTasksTabPage.TabIndex = 5;
+            this.missedTasksTabPage.Text = "Missed tasks";
+            this.missedTasksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // missedTasksGridView
+            // 
+            this.missedTasksGridView.AllowUserToAddRows = false;
+            this.missedTasksGridView.AllowUserToDeleteRows = false;
+            this.missedTasksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.missedTasksGridView.Location = new System.Drawing.Point(3, 3);
+            this.missedTasksGridView.Name = "missedTasksGridView";
+            this.missedTasksGridView.ReadOnly = true;
+            this.missedTasksGridView.Size = new System.Drawing.Size(762, 381);
+            this.missedTasksGridView.TabIndex = 0;
+            // 
+            // failedTasksTabPage
+            // 
+            this.failedTasksTabPage.Controls.Add(this.failedTasksGridView);
+            this.failedTasksTabPage.Location = new System.Drawing.Point(4, 22);
+            this.failedTasksTabPage.Name = "failedTasksTabPage";
+            this.failedTasksTabPage.Size = new System.Drawing.Size(768, 387);
+            this.failedTasksTabPage.TabIndex = 6;
+            this.failedTasksTabPage.Text = "Failed tasks";
+            this.failedTasksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // failedTasksGridView
+            // 
+            this.failedTasksGridView.AllowUserToAddRows = false;
+            this.failedTasksGridView.AllowUserToDeleteRows = false;
+            this.failedTasksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.failedTasksGridView.Location = new System.Drawing.Point(3, 3);
+            this.failedTasksGridView.Name = "failedTasksGridView";
+            this.failedTasksGridView.ReadOnly = true;
+            this.failedTasksGridView.Size = new System.Drawing.Size(762, 381);
+            this.failedTasksGridView.TabIndex = 1;
+            // 
+            // commentedTasksTabPage
+            // 
+            this.commentedTasksTabPage.Controls.Add(this.commentedTasksGridView);
+            this.commentedTasksTabPage.Location = new System.Drawing.Point(4, 22);
+            this.commentedTasksTabPage.Name = "commentedTasksTabPage";
+            this.commentedTasksTabPage.Size = new System.Drawing.Size(768, 387);
+            this.commentedTasksTabPage.TabIndex = 7;
+            this.commentedTasksTabPage.Text = "Commented tasks";
+            this.commentedTasksTabPage.UseVisualStyleBackColor = true;
+            // 
+            // commentedTasksGridView
+            // 
+            this.commentedTasksGridView.AllowUserToAddRows = false;
+            this.commentedTasksGridView.AllowUserToDeleteRows = false;
+            this.commentedTasksGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.commentedTasksGridView.Location = new System.Drawing.Point(3, 3);
+            this.commentedTasksGridView.Name = "commentedTasksGridView";
+            this.commentedTasksGridView.ReadOnly = true;
+            this.commentedTasksGridView.Size = new System.Drawing.Size(762, 381);
+            this.commentedTasksGridView.TabIndex = 2;
             // 
             // StudentOverviewForm
             // 
@@ -277,6 +381,14 @@ namespace Cllient_app
             ((System.ComponentModel.ISupportInitialize)(this.tasksGridView)).EndInit();
             this.eventsTabPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.eventsGridView)).EndInit();
+            this.marksForReportsTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.marksForReportsGridView)).EndInit();
+            this.missedTasksTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.missedTasksGridView)).EndInit();
+            this.failedTasksTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.failedTasksGridView)).EndInit();
+            this.commentedTasksTabPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.commentedTasksGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -302,5 +414,13 @@ namespace Cllient_app
         private System.Windows.Forms.TabPage eventsTabPage;
         private System.Windows.Forms.Button signOutButton;
         private System.Windows.Forms.DataGridView eventsGridView;
+        private System.Windows.Forms.TabPage marksForReportsTabPage;
+        private System.Windows.Forms.DataGridView marksForReportsGridView;
+        private System.Windows.Forms.TabPage missedTasksTabPage;
+        private System.Windows.Forms.DataGridView missedTasksGridView;
+        private System.Windows.Forms.TabPage failedTasksTabPage;
+        private System.Windows.Forms.DataGridView failedTasksGridView;
+        private System.Windows.Forms.TabPage commentedTasksTabPage;
+        private System.Windows.Forms.DataGridView commentedTasksGridView;
     }
 }

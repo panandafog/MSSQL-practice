@@ -44,6 +44,11 @@ namespace Cllient_app
 
             initEventsTable();
             refreshEventsTable();
+
+            showMarksForReportsTable();
+            showMissedTasksTable();
+            showFailedTasksTable();
+            showCommentedTasksTable();
         }
 
         private void StudentOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -172,6 +177,82 @@ namespace Cllient_app
 
             adapter = new OleDbDataAdapter(strSQL, connection);
             adapter.Fill(dataSet, "Tasks");
+        }
+
+        private void showMarksForReportsTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("MarksForReports");
+
+            marksForReportsGridView.DataSource = dataSet;
+            marksForReportsGridView.DataMember = "MarksForReports";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["MarksForReports"].Clear();
+
+            String strSQL = "EXEC GetReportsWithMarksForStudent @studentID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "MarksForReports");
+        }
+
+        private void showMissedTasksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("MissedTasks");
+
+            missedTasksGridView.DataSource = dataSet;
+            missedTasksGridView.DataMember = "MissedTasks";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["MissedTasks"].Clear();
+
+            String strSQL = "EXEC GetMissedTasksForStudent @studentID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "MissedTasks");
+        }
+
+        private void showFailedTasksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("FailedTasks");
+
+            failedTasksGridView.DataSource = dataSet;
+            failedTasksGridView.DataMember = "FailedTasks";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["FailedTasks"].Clear();
+
+            String strSQL = "EXEC GetFailedTasksForStudent @studentID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "FailedTasks");
+        }
+
+        private void showCommentedTasksTable()
+        {
+            DataTable tmpTable;
+            tmpTable = dataSet.Tables.Add("CommentedTasks");
+
+            commentedTasksGridView.DataSource = dataSet;
+            commentedTasksGridView.DataMember = "CommentedTasks";
+
+            System.Data.OleDb.OleDbDataAdapter adapter;
+
+            dataSet.Tables["CommentedTasks"].Clear();
+
+            String strSQL = "EXEC GetCommentedTasksForStudent @studentID = " +
+                userInfo.id;
+
+            adapter = new OleDbDataAdapter(strSQL, connection);
+            adapter.Fill(dataSet, "CommentedTasks");
         }
 
         private void tasksSubjectComboBox_SelectedIndexChanged(object sender, EventArgs e)
