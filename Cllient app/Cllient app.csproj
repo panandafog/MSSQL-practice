@@ -52,6 +52,12 @@
     <Compile Include="DepartmentOverviewForm.Designer.cs">
       <DependentUpon>DepartmentOverviewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ChangePasswordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChangePasswordForm.Designer.cs">
+      <DependentUpon>ChangePasswordForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TeacherTaskMarksOverviewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +100,9 @@
     <Compile Include="Utility.cs" />
     <EmbeddedResource Include="DepartmentOverviewForm.resx">
       <DependentUpon>DepartmentOverviewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ChangePasswordForm.resx">
+      <DependentUpon>ChangePasswordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StudentsTaskOverviewForm.resx">
       <DependentUpon>StudentsTaskOverviewForm.cs</DependentUpon>

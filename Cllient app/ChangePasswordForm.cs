@@ -12,11 +12,11 @@ using System.Data.OleDb;
 
 namespace Cllient_app
 {
-    public partial class SignInForm : Form
+    public partial class ChangePasswordForm : Form
     {
         OleDbConnection cn;
 
-        public SignInForm()
+        public ChangePasswordForm()
         {
             InitializeComponent();
 
@@ -25,16 +25,17 @@ namespace Cllient_app
             accountTypeComboBox.Items.Add("teacher");
             accountTypeComboBox.Items.Add("administrator");
 
-            passwordTextBox.PasswordChar = '*';
+            oldPasswordTextBox.PasswordChar = '*';
+            newPasswordTextBox.PasswordChar = '*';
 
             cn = new OleDbConnection();
             cn.ConnectionString = "Provider=SQLOLEDB;Data Source=localhost;Persist Security Info=True;Password=orangejuice_1101;User ID=SA;Initial Catalog=University";
             cn.Open();
         }
 
-        private void signInButton_Click(object sender, EventArgs e)
+        private void confirmButton_Click(object sender, EventArgs e)
         {
-            string sSourceData = passwordTextBox.Text;
+            string sSourceData = oldPasswordTextBox.Text;
             //Create a byte array from source data.
             byte[] tmpSource = ASCIIEncoding.ASCII.GetBytes(sSourceData);
             byte[] tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
@@ -70,12 +71,52 @@ namespace Cllient_app
             {
                 if (reader.Read())
                 {
-                    Form newForm = new SignInForm();
                     UserInfo userInfo = new UserInfo();
 
                     userInfo.id = reader[0].ToString();
                     userInfo.firstName = reader[1].ToString();
                     userInfo.lastName = reader[2].ToString();
+
+                    sSourceData = newPasswordTextBox.Text;
+                    tmpSource = ASCIIEncoding.ASCII.GetBytes(sSourceData);
+                    tmpHash = new MD5CryptoServiceProvider().ComputeHash(tmpSource);
+                    tmpHashString = Utility.ByteArrayToString(tmpHash);
+
+                    strSQL = "";
+
+                    switch (accountTypeComboBox.SelectedIndex)
+                    {
+                        case 0:
+                            strSQL = "UPDATE Students SET Password = ? WHERE StudentID = ?";
+                            break;
+                        case 1:
+                            strSQL = "UPDATE Teachers SET Password = ? WHERE TeacherID = ?";
+                            break;
+                        case 2:
+                            strSQL = "UPDATE Adminstrators SET Password = ? WHERE AdminID = ?";
+                            break;
+                    }
+
+                    cmd = new OleDbCommand(strSQL, cn);
+
+                    cmd.Parameters.Add("@p1", OleDbType.VarChar, 50);
+                    cmd.Parameters.Add("@p2", OleDbType.VarChar, 50);
+
+                    cmd.Parameters[0].Value = tmpHashString;
+                    cmd.Parameters[1].Value = userInfo.id;
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Password updated");
+                    }
+                    catch (OleDbException exc)
+                    {
+                        MessageBox.Show("Password updating failed");
+                        MessageBox.Show(exc.ToString());
+                    }
+
+                    Form newForm = new SignInForm();
 
                     switch (accountTypeComboBox.SelectedIndex)
                     {
@@ -90,6 +131,7 @@ namespace Cllient_app
                             break;
                     }
                     newForm.Show();
+
                 }
                 else
                 {
@@ -102,15 +144,9 @@ namespace Cllient_app
             }
         }
 
-        private void SignInForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void ChangePasswordForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             cn.Close();
-        }
-
-        private void changePasswordButton_Click(object sender, EventArgs e)
-        {
-            Form newForm = new ChangePasswordForm();
-            newForm.Show();
         }
     }
 }

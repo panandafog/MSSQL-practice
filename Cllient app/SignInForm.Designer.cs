@@ -36,6 +36,7 @@ namespace Cllient_app
             this.signInButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.accountTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.changePasswordButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // loginTextBox
@@ -108,11 +109,24 @@ namespace Cllient_app
             this.accountTypeComboBox.Size = new System.Drawing.Size(100, 21);
             this.accountTypeComboBox.TabIndex = 6;
             // 
+            // changePasswordButton
+            // 
+            this.changePasswordButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.changePasswordButton.Location = new System.Drawing.Point(679, 415);
+            this.changePasswordButton.Name = "changePasswordButton";
+            this.changePasswordButton.Size = new System.Drawing.Size(109, 23);
+            this.changePasswordButton.TabIndex = 7;
+            this.changePasswordButton.Text = "Change password";
+            this.changePasswordButton.UseVisualStyleBackColor = true;
+            this.changePasswordButton.Click += new System.EventHandler(this.changePasswordButton_Click);
+            // 
             // SignInForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.changePasswordButton);
             this.Controls.Add(this.accountTypeComboBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.signInButton);
@@ -137,6 +151,7 @@ namespace Cllient_app
         private System.Windows.Forms.Button signInButton;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox accountTypeComboBox;
+        private System.Windows.Forms.Button changePasswordButton;
     }
 }
 
