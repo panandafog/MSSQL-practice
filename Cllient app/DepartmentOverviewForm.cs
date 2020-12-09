@@ -273,7 +273,7 @@ namespace Cllient_app
 
         private void DepartmentOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            connection.Close();
+
         }
 
         private void initStudentsTable()

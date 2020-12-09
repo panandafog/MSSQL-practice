@@ -49,7 +49,7 @@ namespace Cllient_app
 
         private void TeacherOverviewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            connection.Close();
+
         }
 
         private void refreshTimetableButton_Click(object sender, EventArgs e)
